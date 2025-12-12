@@ -291,7 +291,7 @@ const HomePage = () => {
                 className="relative rounded-2xl overflow-hidden group"
               >
                 <img
-                  src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600"
+                  src="https://i.postimg.cc/HkZHwyCg/perlindor-chiennhudo-3762845028374006081-s2025-12-12-22-38-184-story.jpg"
                   alt="Our Story"
                   className="w-full h-full object-cover"
                 />
