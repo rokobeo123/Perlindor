@@ -1,0 +1,103 @@
+/* Video Responsive Styles */
+
+/* Video container styling */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+/* Individual video card */
+.video-card {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(201, 167, 245, 0.3);
+}
+
+/* Video iframe styling */
+.video-iframe {
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Center alignment for video section */
+.video-section-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .video-grid {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .video-card {
+    max-width: 100%;
+  }
+}
+
+/* Empty video slot styling */
+.empty-video-slot {
+  background: linear-gradient(145deg, rgba(201, 167, 245, 0.1), rgba(255, 184, 245, 0.05));
+  border: 2px dashed rgba(201, 167, 245, 0.3);
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 10px rgba(201, 167, 245, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(201, 167, 245, 0.3);
+  }
+}
+
+/* YouTube badge */
+.youtube-badge {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+}
+
+/* Video title line clamp */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Aspect ratio container */
+.aspect-video {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+.aspect-video > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

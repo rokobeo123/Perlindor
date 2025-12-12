@@ -1,0 +1,317 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #0A041A;
+  overflow-x: hidden;
+  color: #E2D9FF;
+}
+
+/* ===== IMPROVED TEXT CONTRAST ===== */
+
+/* Section headers - Bright lavender with glow */
+.section-header {
+  @apply font-fredoka font-bold text-4xl md:text-5xl text-lavender-200;
+  text-shadow: 0 0 10px rgba(201, 167, 245, 0.5), 0 0 20px rgba(201, 167, 245, 0.3);
+}
+
+/* Card text - Soft mint for better readability */
+.card-text {
+  @apply font-nunito text-mint-100 leading-relaxed;
+}
+
+/* Important text - Neon accent */
+.important-text {
+  @apply font-fredoka font-bold text-neonYellow;
+  text-shadow: 0 0 5px rgba(255, 228, 122, 0.3);
+}
+
+/* Secondary text - Soft pink */
+.secondary-text {
+  @apply font-pacifico text-pink-100;
+}
+
+/* Subtle text - Light lavender */
+.subtle-text {
+  @apply font-nunito text-lavender-100;
+}
+
+/* Button text - High contrast */
+.button-text {
+  @apply font-nunito font-bold text-lavender-50;
+}
+
+/* ===== CUSTOM COLOR VARIANTS ===== */
+.text-lavender-50 { color: #F8F4FF; }
+.text-lavender-100 { color: #E2D9FF; }
+.text-lavender-200 { color: #C9A7F5; }
+.text-pink-100 { color: #FFD6F5; }
+.text-pink-200 { color: #FFB8F5; }
+.text-mint-100 { color: #C7FFF2; }
+.text-mint-200 { color: #7FFFE7; }
+.text-neonYellow { color: #FFE47A; }
+
+/* ===== COMPONENT-SPECIFIC TEXT STYLES ===== */
+
+/* Hero section - Bright and bold */
+.hero-title {
+  @apply font-baloo font-bold text-lavender-50;
+  text-shadow: 0 0 15px rgba(201, 167, 245, 0.6), 0 0 30px rgba(201, 167, 245, 0.4);
+}
+
+.hero-subtitle {
+  @apply font-pacifico text-mint-200;
+  text-shadow: 0 0 10px rgba(127, 255, 231, 0.3);
+}
+
+/* Navigation - Clear contrast */
+.nav-link {
+  @apply font-nunito font-semibold text-lavender-100 hover:text-mint-200 transition-colors;
+}
+
+/* Card content - Optimized readability */
+.card-content {
+  @apply font-nunito text-lavender-50 leading-relaxed;
+}
+
+.card-title {
+  @apply font-fredoka font-bold text-lavender-200 mb-2;
+}
+
+/* Form elements - Clear labels */
+.form-label {
+  @apply font-nunito font-semibold text-mint-100 mb-2;
+}
+
+.form-input {
+  @apply font-nunito text-lavender-50 placeholder:text-lavender-200/50;
+}
+
+/* Footer/helper text */
+.helper-text {
+  @apply font-nunito text-sm text-lavender-100/70;
+}
+
+/* ===== ANIMATIONS & EFFECTS ===== */
+
+/* Custom scrollbar with aurora glow effect */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1A0B3A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #C9A7F5, #A67BCB);
+  border-radius: 6px;
+  box-shadow: 0 0 10px #C9A7F5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #FFB8F5, #C9A7F5);
+  box-shadow: 0 0 20px #FFB8F5;
+}
+
+/* Glass morphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced glass for better readability */
+.glass-dark {
+  background: rgba(10, 4, 26, 0.7);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(201, 167, 245, 0.2);
+}
+
+/* Aurora shimmer effect */
+.aurora-shimmer {
+  background: linear-gradient(
+    45deg,
+    rgba(127, 255, 231, 0.1),
+    rgba(255, 184, 245, 0.1),
+    rgba(255, 228, 122, 0.1),
+    rgba(201, 167, 245, 0.1)
+  );
+  background-size: 400% 400%;
+  animation: aurora 8s ease-in-out infinite;
+}
+
+/* Neon glow text */
+.neon-text {
+  text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+}
+
+/* Soft glow for subtle elements */
+.soft-glow {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+/* Blur shadow for depth */
+.blur-shadow {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Polaroid frame effect */
+.polaroid {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 12px 40px 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.3);
+  transform: rotate(-2deg);
+  transition: all 0.3s ease;
+}
+
+.polaroid:nth-child(even) {
+  transform: rotate(2deg);
+}
+
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: 0 0 30px rgba(201, 167, 245, 0.6);
+}
+
+/* Keyframes for animations */
+@keyframes aurora {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px currentColor, 0 0 10px currentColor; }
+  100% { box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor; }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Animation classes */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.animate-flicker {
+  animation: flicker 3s ease-in-out infinite;
+}
+
+/* Responsive text adjustments */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .section-header {
+    font-size: 2rem;
+  }
+  
+  .card-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* Thêm vào cuối file */
+
+/* Viền vàng glow cho achievements */
+.achievement-glow {
+  position: relative;
+}
+
+.achievement-glow::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(45deg, #FFE47A, #FFD700, #FFE47A);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.7;
+  filter: blur(8px);
+  animation: achievement-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes achievement-glow {
+  0% {
+    opacity: 0.5;
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 0.9;
+    filter: blur(10px);
+  }
+}
+
+/* Neon border effect */
+.neon-border {
+  position: relative;
+  border: 2px solid transparent;
+  background: linear-gradient(#0A041A, #0A041A) padding-box,
+              linear-gradient(45deg, #FFE47A, #FFD700, #FFE47A) border-box;
+}
+
+/* Đảm bảo text neonYellow có đủ contrast */
+.text-neonYellow {
+  color: #FFE47A !important;
+  text-shadow: 0 0 8px rgba(255, 228, 122, 0.5), 0 0 16px rgba(255, 228, 122, 0.3) !important;
+}
+
+/* Glow effect mạnh hơn cho achievements */
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    opacity: 0.5;
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(10px);
+  }
+}
+
+/* Video Styles */
+@import './video.css';
+
+/* Additional video utilities */
+.video-play-overlay {
+  transition: opacity 0.3s ease;
+  background: linear-gradient(to bottom, transparent 30%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+.video-play-overlay:hover {
+  opacity: 1;
+}
+
+/* Admin Panel Fixes */
+@import './admin-fixes.css';

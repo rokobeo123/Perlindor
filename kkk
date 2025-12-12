@@ -1,0 +1,3685 @@
+#!/bin/bash
+
+# Purple Aurora Memories - Automated Setup Script
+# This script creates the complete project structure and all necessary files
+
+echo "🌟 Creating Purple Aurora Memories Project..."
+
+# Create project directory
+mkdir -p purple-aurora-memories
+cd purple-aurora-memories
+
+# Initialize package.json
+cat > package.json << 'EOF'
+{
+  "name": "purple-aurora-memories",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
+    "framer-motion": "^10.16.16",
+    "lucide-react": "^0.263.1",
+    "firebase": "^10.7.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.8",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.32",
+    "autoprefixer": "^10.4.16"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}
+EOF
+
+# Create vite.config.js
+cat > vite.config.js << 'EOF'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 3000,
+    open: true
+  }
+})
+EOF
+
+# Create tailwind.config.js
+cat > tailwind.config.js << 'EOF'
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // Base colors
+        lavender: {
+          50: '#F8F4FF',
+          100: '#E2D9FF',
+          200: '#C9A7F5',
+          300: '#B185EB',
+          400: '#A67BCB',
+        },
+        pink: {
+          100: '#FFD6F5',
+          200: '#FFB8F5',
+          300: '#FF9AEB',
+        },
+        mint: {
+          100: '#C7FFF2',
+          200: '#7FFFE7',
+          300: '#5AF0D9',
+        },
+        midnight: '#1A0B3A',
+        neonYellow: '#FFE47A',
+        
+        // Dark theme colors
+        dark: {
+          DEFAULT: '#0A041A',
+          lighter: '#1A0B3A',
+        }
+      },
+      fontFamily: {
+        baloo: ['Baloo 2', 'cursive'],
+        fredoka: ['Fredoka', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+        pacifico: ['Pacifico', 'cursive'],
+      },
+      animation: {
+        'aurora': 'aurora 8s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'shimmer': 'shimmer 3s linear infinite',
+        'glow': 'glow 2s ease-in-out infinite alternate',
+        'flicker': 'flicker 3s ease-in-out infinite',
+        'pulse-glow': 'pulse 2s ease-in-out infinite',
+      },
+      keyframes: {
+        aurora: {
+          '0%, 100%': { transform: 'translateX(0%) translateY(0%) rotate(0deg)', opacity: '0.5' },
+          '33%': { transform: 'translateX(30%) translateY(-30%) rotate(120deg)', opacity: '0.8' },
+          '66%': { transform: 'translateX(-20%) translateY(20%) rotate(240deg)', opacity: '0.6' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-1000px 0' },
+          '100%': { backgroundPosition: '1000px 0' },
+        },
+        glow: {
+          '0%': { boxShadow: '0 0 5px currentColor, 0 0 10px currentColor' },
+          '100%': { boxShadow: '0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor' },
+        },
+        flicker: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
+        },
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
+    },
+  },
+  plugins: [],
+}
+EOF
+
+# Create postcss.config.js
+cat > postcss.config.js << 'EOF'
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+EOF
+
+# Create index.html
+cat > index.html << 'EOF'
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Purple Aurora Memories</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+EOF
+
+# Create src directory structure
+mkdir -p src/{components,pages,styles,utils,contexts}
+
+# Create main.jsx
+cat > src/main.jsx << 'EOF'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './styles/index.css'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+EOF
+
+# Create index.css
+cat > src/styles/index.css << 'EOF'
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #0A041A;
+  overflow-x: hidden;
+  color: #E2D9FF;
+}
+
+/* ===== IMPROVED TEXT CONTRAST ===== */
+
+/* Section headers - Bright lavender with glow */
+.section-header {
+  @apply font-fredoka font-bold text-4xl md:text-5xl text-lavender-200;
+  text-shadow: 0 0 10px rgba(201, 167, 245, 0.5), 0 0 20px rgba(201, 167, 245, 0.3);
+}
+
+/* Card text - Soft mint for better readability */
+.card-text {
+  @apply font-nunito text-mint-100 leading-relaxed;
+}
+
+/* Important text - Neon accent */
+.important-text {
+  @apply font-fredoka font-bold text-neonYellow;
+  text-shadow: 0 0 5px rgba(255, 228, 122, 0.3);
+}
+
+/* Secondary text - Soft pink */
+.secondary-text {
+  @apply font-pacifico text-pink-100;
+}
+
+/* Subtle text - Light lavender */
+.subtle-text {
+  @apply font-nunito text-lavender-100;
+}
+
+/* Button text - High contrast */
+.button-text {
+  @apply font-nunito font-bold text-lavender-50;
+}
+
+/* ===== CUSTOM COLOR VARIANTS ===== */
+.text-lavender-50 { color: #F8F4FF; }
+.text-lavender-100 { color: #E2D9FF; }
+.text-lavender-200 { color: #C9A7F5; }
+.text-pink-100 { color: #FFD6F5; }
+.text-pink-200 { color: #FFB8F5; }
+.text-mint-100 { color: #C7FFF2; }
+.text-mint-200 { color: #7FFFE7; }
+.text-neonYellow { color: #FFE47A; }
+
+/* ===== COMPONENT-SPECIFIC TEXT STYLES ===== */
+
+/* Hero section - Bright and bold */
+.hero-title {
+  @apply font-baloo font-bold text-lavender-50;
+  text-shadow: 0 0 15px rgba(201, 167, 245, 0.6), 0 0 30px rgba(201, 167, 245, 0.4);
+}
+
+.hero-subtitle {
+  @apply font-pacifico text-mint-200;
+  text-shadow: 0 0 10px rgba(127, 255, 231, 0.3);
+}
+
+/* Navigation - Clear contrast */
+.nav-link {
+  @apply font-nunito font-semibold text-lavender-100 hover:text-mint-200 transition-colors;
+}
+
+/* Card content - Optimized readability */
+.card-content {
+  @apply font-nunito text-lavender-50 leading-relaxed;
+}
+
+.card-title {
+  @apply font-fredoka font-bold text-lavender-200 mb-2;
+}
+
+/* Form elements - Clear labels */
+.form-label {
+  @apply font-nunito font-semibold text-mint-100 mb-2;
+}
+
+.form-input {
+  @apply font-nunito text-lavender-50 placeholder:text-lavender-200/50;
+}
+
+/* Footer/helper text */
+.helper-text {
+  @apply font-nunito text-sm text-lavender-100/70;
+}
+
+/* ===== ANIMATIONS & EFFECTS ===== */
+
+/* Custom scrollbar with aurora glow effect */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1A0B3A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #C9A7F5, #A67BCB);
+  border-radius: 6px;
+  box-shadow: 0 0 10px #C9A7F5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #FFB8F5, #C9A7F5);
+  box-shadow: 0 0 20px #FFB8F5;
+}
+
+/* Glass morphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced glass for better readability */
+.glass-dark {
+  background: rgba(10, 4, 26, 0.7);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(201, 167, 245, 0.2);
+}
+
+/* Aurora shimmer effect */
+.aurora-shimmer {
+  background: linear-gradient(
+    45deg,
+    rgba(127, 255, 231, 0.1),
+    rgba(255, 184, 245, 0.1),
+    rgba(255, 228, 122, 0.1),
+    rgba(201, 167, 245, 0.1)
+  );
+  background-size: 400% 400%;
+  animation: aurora 8s ease-in-out infinite;
+}
+
+/* Neon glow text */
+.neon-text {
+  text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+}
+
+/* Soft glow for subtle elements */
+.soft-glow {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+/* Blur shadow for depth */
+.blur-shadow {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Polaroid frame effect */
+.polaroid {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 12px 40px 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.3);
+  transform: rotate(-2deg);
+  transition: all 0.3s ease;
+}
+
+.polaroid:nth-child(even) {
+  transform: rotate(2deg);
+}
+
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: 0 0 30px rgba(201, 167, 245, 0.6);
+}
+
+/* Keyframes for animations */
+@keyframes aurora {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px currentColor, 0 0 10px currentColor; }
+  100% { box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor; }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Animation classes */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.animate-flicker {
+  animation: flicker 3s ease-in-out infinite;
+}
+
+/* Responsive text adjustments */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .section-header {
+    font-size: 2rem;
+  }
+  
+  .card-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* Thêm vào cuối file */
+
+/* Viền vàng glow cho achievements */
+.achievement-glow {
+  position: relative;
+}
+
+.achievement-glow::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(45deg, #FFE47A, #FFD700, #FFE47A);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.7;
+  filter: blur(8px);
+  animation: achievement-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes achievement-glow {
+  0% {
+    opacity: 0.5;
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 0.9;
+    filter: blur(10px);
+  }
+}
+
+/* Neon border effect */
+.neon-border {
+  position: relative;
+  border: 2px solid transparent;
+  background: linear-gradient(#0A041A, #0A041A) padding-box,
+              linear-gradient(45deg, #FFE47A, #FFD700, #FFE47A) border-box;
+}
+
+/* Đảm bảo text neonYellow có đủ contrast */
+.text-neonYellow {
+  color: #FFE47A !important;
+  text-shadow: 0 0 8px rgba(255, 228, 122, 0.5), 0 0 16px rgba(255, 228, 122, 0.3) !important;
+}
+
+/* Glow effect mạnh hơn cho achievements */
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    opacity: 0.5;
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(10px);
+  }
+}
+
+/* Video Styles */
+@import './video.css';
+
+/* Additional video utilities */
+.video-play-overlay {
+  transition: opacity 0.3s ease;
+  background: linear-gradient(to bottom, transparent 30%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+.video-play-overlay:hover {
+  opacity: 1;
+}
+
+/* Admin Panel Fixes */
+@import './admin-fixes.css';
+EOF
+cat > src/styles/video.css << 'EOF'
+/* Video Responsive Styles */
+
+/* Video container styling */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+/* Individual video card */
+.video-card {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(201, 167, 245, 0.3);
+}
+
+/* Video iframe styling */
+.video-iframe {
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Center alignment for video section */
+.video-section-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .video-grid {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .video-card {
+    max-width: 100%;
+  }
+}
+
+/* Empty video slot styling */
+.empty-video-slot {
+  background: linear-gradient(145deg, rgba(201, 167, 245, 0.1), rgba(255, 184, 245, 0.05));
+  border: 2px dashed rgba(201, 167, 245, 0.3);
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 10px rgba(201, 167, 245, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(201, 167, 245, 0.3);
+  }
+}
+
+/* YouTube badge */
+.youtube-badge {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+}
+
+/* Video title line clamp */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Aspect ratio container */
+.aspect-video {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+.aspect-video > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+EOF
+cat > src/styles/admin-fixes.css << 'EOF'
+/* Fix Admin Panel Overlay Issues */
+
+/* Fix background khi mở modal chỉnh sửa */
+.admin-modal-fix {
+  background: linear-gradient(135deg, #0A041A 0%, #1A0B3A 50%, #0A041A 100%) !important;
+}
+
+/* Fix overlay không bị tím */
+.admin-overlay-fix {
+  background: rgba(10, 4, 26, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* Fix form background */
+.admin-form-fix {
+  background: rgba(26, 11, 58, 0.8) !important;
+  backdrop-filter: blur(15px) !important;
+  border: 1px solid rgba(201, 167, 245, 0.3) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Fix content display background */
+.admin-content-fix {
+  background: rgba(26, 11, 58, 0.6) !important;
+  border: 1px solid rgba(201, 167, 245, 0.2) !important;
+}
+
+/* Fix tab active state */
+.admin-tab-active-fix {
+  background: linear-gradient(135deg, rgba(201, 167, 245, 0.2), rgba(255, 184, 245, 0.1)) !important;
+  border-color: rgba(201, 167, 245, 0.5) !important;
+}
+
+/* Fix text color for better readability */
+.admin-text-fix {
+  color: #E2D9FF !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Fix input fields */
+.admin-input-fix {
+  background: rgba(10, 4, 26, 0.7) !important;
+  border: 1px solid rgba(201, 167, 245, 0.4) !important;
+  color: #F8F4FF !important;
+}
+
+.admin-input-fix::placeholder {
+  color: rgba(201, 167, 245, 0.5) !important;
+}
+
+/* Fix upload zone */
+.admin-upload-fix {
+  background: rgba(26, 11, 58, 0.4) !important;
+  border: 2px dashed rgba(201, 167, 245, 0.3) !important;
+}
+
+.admin-upload-fix:hover {
+  background: rgba(201, 167, 245, 0.1) !important;
+  border-color: rgba(201, 167, 245, 0.6) !important;
+}
+
+/* Fix button colors */
+.admin-button-fix {
+  background: linear-gradient(135deg, #C9A7F5, #A67BCB) !important;
+  color: #0A041A !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+
+.admin-button-fix:hover {
+  background: linear-gradient(135deg, #D9B7FF, #B68BDB) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(201, 167, 245, 0.4) !important;
+}
+
+/* Fix cancel button */
+.admin-cancel-fix {
+  background: rgba(201, 167, 245, 0.1) !important;
+  border: 1px solid rgba(201, 167, 245, 0.4) !important;
+  color: #C9A7F5 !important;
+}
+
+.admin-cancel-fix:hover {
+  background: rgba(201, 167, 245, 0.2) !important;
+}
+
+/* Fix preview images */
+.admin-preview-fix {
+  border: 2px solid rgba(201, 167, 245, 0.4) !important;
+  background: rgba(10, 4, 26, 0.8) !important;
+}
+
+/* Fix progress bar */
+.admin-progress-fix {
+  background: linear-gradient(90deg, #C9A7F5, #FFB8F5) !important;
+}
+
+/* Fix success/error messages */
+.admin-success-fix {
+  background: linear-gradient(135deg, rgba(127, 255, 231, 0.2), rgba(201, 167, 245, 0.1)) !important;
+  border: 1px solid rgba(127, 255, 231, 0.4) !important;
+  color: #7FFFE7 !important;
+}
+
+.admin-error-fix {
+  background: linear-gradient(135deg, rgba(255, 184, 245, 0.2), rgba(255, 152, 235, 0.1)) !important;
+  border: 1px solid rgba(255, 184, 245, 0.4) !important;
+  color: #FFB8F5 !important;
+}
+
+/* Fix scrollbar */
+.admin-scrollbar-fix::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-scrollbar-fix::-webkit-scrollbar-track {
+  background: rgba(26, 11, 58, 0.5);
+}
+
+.admin-scrollbar-fix::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #C9A7F5, #A67BCB);
+  border-radius: 4px;
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+  .admin-mobile-fix {
+    padding: 1rem !important;
+  }
+  
+  .admin-form-mobile-fix {
+    padding: 1.5rem !important;
+  }
+}
+EOF
+# Create App.jsx
+cat > src/App.jsx << 'EOF'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { DataProvider } from './contexts/DataContext'
+import Navigation from './components/Navigation'
+import HomePage from './pages/HomePage'
+import MemoriesPage from './pages/MemoriesPage'
+import GuestbookPage from './pages/GuestbookPage'
+import MomentsWallPage from './pages/MomentsWallPage'
+import AdminPanel from './pages/AdminPanel'
+import AuroraBackground from './components/AuroraBackground'
+import FloatingStickers from './components/FloatingStickers'
+
+function App() {
+  return (
+    <DataProvider>
+      <Router>
+        <div className="relative min-h-screen">
+          <AuroraBackground />
+          <FloatingStickers />
+          <div className="relative z-10">
+            <Navigation />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/memories" element={<MemoriesPage />} />
+              <Route path="/guestbook" element={<GuestbookPage />} />
+              <Route path="/moments-wall" element={<MomentsWallPage />} />
+              <Route path="/admin" element={<AdminPanel />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </div>
+        </div>
+      </Router>
+    </DataProvider>
+  )
+}
+
+export default App
+EOF
+
+# Create DataContext.jsx
+cat > src/contexts/DataContext.jsx << 'EOF'
+import React, { createContext, useState, useContext, useEffect } from 'react'
+
+const DataContext = createContext()
+
+export const useData = () => {
+  const context = useContext(DataContext)
+  if (!context) throw new Error('useData must be used within DataProvider')
+  return context
+}
+
+const initialData = {
+  siteSettings: {
+    logoUrl: 'https://images.unsplash.com/photo-1614854262340-ab1ca7d079c7?w=200',
+    siteName: 'Purple Aurora Memories',
+    tagline: 'Where Dreams Shine Bright ✨'
+  },
+  members: [
+    {
+      id: 1,
+      name: 'Aurora',
+      nickname: 'Aura',
+      role: 'lead',
+      funFact: 'Can solve a Rubik\'s cube in under 30 seconds!',
+      avatar: '👑',
+      avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200'
+    },
+    {
+      id: 2,
+      name: 'Luna',
+      nickname: 'Lulu',
+      role: 'member',
+      funFact: 'Speaks 5 languages fluently',
+      avatar: '🌙',
+      avatarUrl: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200'
+    }
+  ],
+  achievements: [
+    { 
+      id: 1, 
+      title: 'First Place', 
+      category: 'Championship 2024', 
+      icon: '🏆', 
+      color: 'neonYellow' 
+    },
+    { 
+      id: 2, 
+      title: 'Best Design', 
+      category: 'National Awards', 
+      icon: '🎨', 
+      color: 'pink' 
+    }
+  ],
+  gallery: [
+    { id: 1, url: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400', caption: 'Team celebration' }
+  ],
+  videos: [
+    { id: 1, url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Year in Review' }
+  ],
+  // ĐÃ XÓA BEST MOMENTS
+  guestbook: [
+    { id: 1, name: 'Alex', message: 'Amazing team!', date: '2024-12-10', likes: 12 }
+  ],
+  momentsWall: [
+    { id: 1, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400', caption: 'Sunset vibes', sticker: '🌅', likes: 15, comments: [] }
+  ]
+}
+
+export const DataProvider = ({ children }) => {
+  const [data, setData] = useState(() => {
+    try {
+      const saved = localStorage.getItem('purpleAuroraData')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        return {
+          siteSettings: { ...initialData.siteSettings, ...parsed.siteSettings },
+          members: parsed.members || initialData.members,
+          achievements: parsed.achievements || initialData.achievements,
+          gallery: parsed.gallery || initialData.gallery,
+          videos: parsed.videos || initialData.videos,
+          // Không còn bestMoments
+          guestbook: parsed.guestbook || initialData.guestbook,
+          momentsWall: parsed.momentsWall || initialData.momentsWall
+        }
+      }
+    } catch (error) {
+      console.error('Error loading from localStorage:', error)
+    }
+    return initialData
+  })
+
+  // Save to localStorage whenever data changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('purpleAuroraData', JSON.stringify(data))
+    } catch (error) {
+      console.error('Error saving to localStorage:', error)
+    }
+  }, [data])
+
+  const addItem = (category, item) => {
+    setData(prev => ({
+      ...prev,
+      [category]: [...(prev[category] || []), { 
+        ...item, 
+        id: Date.now(),
+        date: item.date || new Date().toISOString().split('T')[0]
+      }]
+    }))
+  }
+
+  const updateItem = (category, id, updates) => {
+    setData(prev => ({
+      ...prev,
+      [category]: (prev[category] || []).map(item => 
+        item.id === id ? { ...item, ...updates } : item
+      )
+    }))
+  }
+
+  const deleteItem = (category, id) => {
+    setData(prev => ({
+      ...prev,
+      [category]: (prev[category] || []).filter(item => item.id !== id)
+    }))
+  }
+
+  const updateSiteSettings = (updates) => {
+    setData(prev => ({
+      ...prev,
+      siteSettings: { ...prev.siteSettings, ...updates }
+    }))
+  }
+
+  return (
+    <DataContext.Provider value={{ 
+      data, 
+      addItem, 
+      updateItem, 
+      deleteItem, 
+      updateSiteSettings 
+    }}>
+      {children}
+    </DataContext.Provider>
+  )
+}
+EOF
+
+# Create AuroraBackground.jsx
+cat > src/components/AuroraBackground.jsx << 'EOF'
+import React from 'react'
+import { motion } from 'framer-motion'
+
+const AuroraBackground = () => {
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {/* Base gradient background - TÍM HƠN */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0A041A] via-[#150735] to-[#0A041A] opacity-100" />
+      
+      {/* Thêm lớp tím đậm overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1A0B3A]/80 via-transparent to-[#1A0B3A]/60" />
+      
+      {/* Animated aurora blob 1 - TÍM ĐẬM HƠN */}
+      <motion.div
+        className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full blur-3xl opacity-60"
+        style={{
+          background: 'radial-gradient(circle, rgba(166, 123, 203, 0.9) 0%, rgba(138, 92, 185, 0.7) 40%, rgba(110, 61, 167, 0.5) 60%, transparent 80%)'
+        }}
+        animate={{
+          x: [0, 100, 0],
+          y: [0, -100, 0],
+          scale: [1, 1.3, 1],
+          rotate: [0, 90, 0]
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+      
+      {/* Animated aurora blob 2 - TÍM SÁNG HƠN */}
+      <motion.div
+        className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full blur-3xl opacity-60"
+        style={{
+          background: 'radial-gradient(circle, rgba(201, 167, 245, 0.9) 0%, rgba(177, 133, 235, 0.7) 40%, rgba(153, 99, 225, 0.5) 60%, transparent 80%)'
+        }}
+        animate={{
+          x: [0, -100, 0],
+          y: [0, 100, 0],
+          scale: [1, 1.4, 1],
+          rotate: [0, -90, 0]
+        }}
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+      
+      {/* Animated aurora blob 3 - HỒNG TÍM */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 w-3/4 h-3/4 rounded-full blur-3xl opacity-50"
+        style={{
+          background: 'radial-gradient(circle, rgba(255, 184, 245, 0.8) 0%, rgba(217, 149, 225, 0.6) 40%, rgba(179, 114, 205, 0.4) 60%, transparent 80%)'
+        }}
+        animate={{
+          x: [-50, 50, -50],
+          y: [50, -50, 50],
+          scale: [1, 1.2, 1],
+          rotate: [0, 180, 0]
+        }}
+        transition={{
+          duration: 30,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+      
+      {/* Lớp tím overlay thêm để làm đậm hơn */}
+      <div className="absolute inset-0 bg-[#1A0B3A]/30" />
+      
+      {/* Shimmer overlay cho sparkle - giảm opacity để đỡ sáng */}
+      <div className="absolute inset-0 aurora-shimmer opacity-15" />
+      
+      {/* Star-like particles - tăng số lượng */}
+      <div className="absolute inset-0">
+        {Array.from({ length: 80 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-[2px] h-[2px] bg-lavender-200 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              opacity: [0, 0.8, 0],
+              scale: [0, 1.5, 0]
+            }}
+            transition={{
+              duration: Math.random() * 4 + 2,
+              repeat: Infinity,
+              delay: Math.random() * 5
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default AuroraBackground
+EOF
+
+# Create FloatingStickers.jsx
+cat > src/components/FloatingStickers.jsx << 'EOF'
+import React, { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+
+// Floating stickers with random positions and animations - FIXED WINDOW ISSUE
+const FloatingStickers = () => {
+  const [stickers, setStickers] = useState([])
+
+  useEffect(() => {
+    // Initialize stickers only on client side
+    const initialStickers = [
+      { emoji: '💜', size: 'text-4xl', delay: 0, duration: 8 },
+      { emoji: '⭐', size: 'text-3xl', delay: 1, duration: 10 },
+      { emoji: '✨', size: 'text-2xl', delay: 2, duration: 7 },
+      { emoji: '💫', size: 'text-3xl', delay: 0.5, duration: 9 },
+      { emoji: '🌙', size: 'text-4xl', delay: 1.5, duration: 11 },
+      { emoji: '☁️', size: 'text-5xl', delay: 2.5, duration: 12 },
+      { emoji: '🦋', size: 'text-3xl', delay: 3, duration: 8 },
+      { emoji: '🌸', size: 'text-2xl', delay: 1, duration: 9 },
+      { emoji: '🎀', size: 'text-3xl', delay: 2, duration: 10 },
+      { emoji: '💖', size: 'text-4xl', delay: 0, duration: 8 }
+    ]
+    
+    // Only set positions if window is available
+    const stickersWithPositions = initialStickers.map(sticker => ({
+      ...sticker,
+      initialX: typeof window !== 'undefined' ? Math.random() * window.innerWidth : 0,
+      initialY: typeof window !== 'undefined' ? Math.random() * window.innerHeight : 0
+    }))
+    
+    setStickers(stickersWithPositions)
+  }, [])
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      {stickers.map((sticker, index) => (
+        <motion.div
+          key={index}
+          className={`absolute ${sticker.size} filter blur-[0.5px] pointer-events-none`}
+          initial={{
+            x: sticker.initialX,
+            y: sticker.initialY,
+            opacity: 0.2,
+            scale: 0.8
+          }}
+          animate={{
+            y: [
+              sticker.initialY,
+              typeof window !== 'undefined' ? Math.random() * window.innerHeight : sticker.initialY,
+              typeof window !== 'undefined' ? Math.random() * window.innerHeight : sticker.initialY
+            ],
+            x: [
+              sticker.initialX,
+              typeof window !== 'undefined' ? Math.random() * window.innerWidth : sticker.initialX,
+              typeof window !== 'undefined' ? Math.random() * window.innerWidth : sticker.initialX
+            ],
+            rotate: [0, 180, 360],
+            opacity: [0.1, 0.3, 0.1]
+          }}
+          transition={{
+            duration: sticker.duration,
+            delay: sticker.delay,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          {sticker.emoji}
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+export default FloatingStickers
+EOF
+
+# Create Navigation.jsx
+cat > src/components/Navigation.jsx << 'EOF'
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Menu, X } from 'lucide-react'
+
+const Navigation = () => {
+  const [scrolled, setScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const location = useLocation()
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const navLinks = [
+    { to: '/', label: 'Home' },
+    { to: '/memories', label: 'Memories' },
+    { to: '/guestbook', label: 'Guestbook' },
+    { to: '/moments-wall', label: 'Moments Wall' },
+    { to: '/admin', label: 'Admin' }
+  ]
+
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [location])
+
+  return (
+    <>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled ? 'glass-dark backdrop-blur-xl shadow-lg' : 'bg-transparent'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link to="/" className="flex items-center space-x-2">
+              <motion.span
+                className="font-pacifico text-2xl text-lavender-200 neon-text"
+                whileHover={{ scale: 1.1 }}
+              >
+                Perlindor
+              </motion.span>
+            </Link>
+
+            <div className="hidden md:flex items-center space-x-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`nav-link font-semibold ${
+                    location.pathname === link.to
+                      ? 'text-mint-200 neon-text'
+                      : 'text-lavender-100 hover:text-mint-200'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden text-lavender-200 hover:text-mint-200 transition-colors"
+            >
+              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </div>
+        </div>
+      </motion.nav>
+
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 20 }}
+            className="fixed top-16 right-0 bottom-0 w-64 glass-dark backdrop-blur-xl z-40 md:hidden border-l border-lavender-200/20"
+          >
+            <div className="flex flex-col p-6 space-y-6">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`font-nunito font-semibold text-lg nav-link ${
+                    location.pathname === link.to
+                      ? 'text-mint-200'
+                      : 'text-lavender-100 hover:text-mint-200'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setMobileMenuOpen(false)}
+            className="fixed inset-0 bg-black/60 z-30 md:hidden"
+          />
+        )}
+      </AnimatePresence>
+    </>
+  )
+}
+
+export default Navigation
+EOF
+
+# Create HomePage.jsx - COMPLETE FILE
+cat > src/pages/HomePage.jsx << 'EOF'
+import React, { useState, useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useData } from '../contexts/DataContext'
+import { Award, Users, Book } from 'lucide-react'
+
+const HomePage = () => {
+  const { data } = useData()
+  const [activeTab, setActiveTab] = useState('lead')
+  const heroRef = useRef(null)
+  const { scrollY } = useScroll()
+  
+  // Hero shrink and translate effect on scroll
+  const heroScale = useTransform(scrollY, [0, 300], [1, 0.7])
+  const heroY = useTransform(scrollY, [0, 300], [0, -100])
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0])
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section - Shrinks and moves to header on scroll */}
+      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
+        <motion.div
+          style={{ scale: heroScale, y: heroY, opacity: heroOpacity }}
+          className="text-center z-10 px-4"
+        >
+          {/* Logo with glow effect - Now editable image */}
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ duration: 1, type: 'spring' }}
+            className="mb-8"
+          >
+            <div className="relative inline-block">
+              <img
+                src={data.siteSettings?.logoUrl}
+                alt="Logo"
+                className="w-40 h-40 md:w-56 md:h-56 object-contain rounded-full"
+                style={{
+                  filter: 'drop-shadow(0 0 30px rgba(201, 167, 245, 0.8))'
+                }}
+              />
+              {/* Aurora glow ring around logo - KHÔNG CÓ BLUR */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-lavender via-pink to-mint opacity-30" />
+            </div>
+          </motion.div>
+
+          {/* Title with aurora shimmer - KHÔNG BỊ BLUR */}
+          <motion.h1
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="font-baloo text-6xl md:text-8xl font-bold text-lavender mb-4"
+            style={{
+              textShadow: '0 0 20px rgba(201, 167, 245, 0.8), 0 0 40px rgba(201, 167, 245, 0.6)'
+            }}
+          >
+            {data.siteSettings?.siteName || 'Purple Aurora Memories'}
+          </motion.h1>
+
+          {/* Slogan */}
+          <motion.p
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="font-pacifico text-2xl md:text-3xl text-mint mb-8"
+          >
+            {data.siteSettings?.tagline || 'Where Dreams Shine Bright ✨'}
+          </motion.p>
+
+          {/* CTA Button - NHỎ VÀ TINH TẾ */}
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.9, type: 'spring', stiffness: 100 }}
+          >
+            <motion.button
+              whileHover={{ 
+                scale: 1.03, 
+                boxShadow: '0 0 15px rgba(201, 167, 245, 0.5)'
+              }}
+              whileTap={{ scale: 0.99 }}
+              onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+              className="relative px-6 py-3 rounded-full font-nunito font-semibold text-base text-lavender transition-all duration-200 overflow-hidden"
+              style={{
+                background: 'rgba(201, 167, 245, 0.08)',
+                border: '1px solid rgba(201, 167, 245, 0.3)',
+                backdropFilter: 'blur(6px)'
+              }}
+            >
+              {/* Simple hover effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-lavender/5 to-pink/5 opacity-0 hover:opacity-100 transition-opacity duration-200 rounded-full" />
+              
+              {/* Button content */}
+              <span className="relative z-10 flex items-center justify-center gap-1.5">
+                Explore Our Journey 
+                <motion.span
+                  animate={{ x: [0, 2, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className="inline-block text-lg"
+                >
+                  →
+                </motion.span>
+              </span>
+            </motion.button>
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
+        >
+          <div className="text-lavender/50 text-2xl">↓</div>
+        </motion.div>
+      </section>
+
+      {/* Members Section */}
+      <section id="members" className="py-20 px-4 relative">
+        <div className="max-w-6xl mx-auto">
+          {/* Section Title */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-fredoka text-5xl font-bold text-lavender mb-4 flex items-center justify-center gap-3"
+              style={{
+                textShadow: '0 0 15px rgba(201, 167, 245, 0.5), 0 0 30px rgba(201, 167, 245, 0.3)'
+              }}
+            >
+              <Users className="text-pink" size={48} />
+              Our Amazing Team
+            </h2>
+            <p className="font-nunito text-xl text-mint">The stars behind the magic</p>
+          </motion.div>
+
+          {/* Tabs for Lead/Members - SỬA LẠI CHO DỄ NHÌN */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex justify-center mb-12 gap-4"
+          >
+            <button
+              onClick={() => setActiveTab('lead')}
+              className={`px-8 py-3 rounded-full font-nunito font-bold text-lg transition-all duration-300 relative overflow-hidden ${
+                activeTab === 'lead'
+                  ? 'border-2 border-lavender shadow-lg shadow-lavender/50'
+                  : 'glass border-2 border-transparent hover:border-lavender/30'
+              }`}
+            >
+              {/* Background glow cho tab active */}
+              {activeTab === 'lead' && (
+                <div className="absolute inset-0 bg-gradient-to-r from-lavender/20 to-pink/20 blur-sm" />
+              )}
+              <span className={`relative z-10 ${
+                activeTab === 'lead' ? 'text-lavender' : 'text-lavender/80'
+              }`}>
+                👑 Leaders
+              </span>
+            </button>
+            <button
+              onClick={() => setActiveTab('member')}
+              className={`px-8 py-3 rounded-full font-nunito font-bold text-lg transition-all duration-300 relative overflow-hidden ${
+                activeTab === 'member'
+                  ? 'border-2 border-pink shadow-lg shadow-pink/50'
+                  : 'glass border-2 border-transparent hover:border-pink/30'
+              }`}
+            >
+              {/* Background glow cho tab active */}
+              {activeTab === 'member' && (
+                <div className="absolute inset-0 bg-gradient-to-r from-pink/20 to-lavender/20 blur-sm" />
+              )}
+              <span className={`relative z-10 ${
+                activeTab === 'member' ? 'text-pink' : 'text-pink/80'
+              }`}>
+                ⭐ Members
+              </span>
+            </button>
+          </motion.div>
+
+          {/* Members Grid with animated fade on tab switch */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, x: activeTab === 'lead' ? -50 : 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: activeTab === 'lead' ? 50 : -50 }}
+            transition={{ duration: 0.5 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+          >
+            {data.members
+              .filter(m => m.role === activeTab)
+              .map((member, index) => (
+                <motion.div
+                  key={member.id}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  whileHover={{ scale: 1.05, rotate: 2 }}
+                  className="glass rounded-3xl p-6 text-center relative overflow-hidden group blur-shadow"
+                >
+                  {/* Glow effect on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-lavender/10 to-pink/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  {/* Avatar - HIỂN THỊ ẢNH THAY VÌ EMOJI */}
+                  <div className="relative z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.3 }}
+                      className="relative mb-4 mx-auto w-24 h-24"
+                    >
+                      {member.avatarUrl ? (
+                        <>
+                          <img
+                            src={member.avatarUrl}
+                            alt={member.name}
+                            className="w-full h-full object-cover rounded-full border-4 border-lavender/30 shadow-lg"
+                          />
+                          {/* Role badge */}
+                          <div className={`absolute -bottom-2 -right-2 w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-lg ${
+                            member.role === 'lead' 
+                              ? 'bg-gradient-to-r from-yellow-400 to-amber-500 border-2 border-amber-300' 
+                              : 'bg-gradient-to-r from-pink-400 to-purple-500 border-2 border-pink-300'
+                          }`}>
+                            {member.role === 'lead' ? '👑' : '⭐'}
+                          </div>
+                          {/* Glow ring */}
+                          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-lavender/30 to-pink/30 blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        </>
+                      ) : (
+                        <motion.div
+                          animate={{ rotate: [0, 5, -5, 0] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          className="text-7xl mb-4"
+                        >
+                          {member.avatar}
+                        </motion.div>
+                      )}
+                    </motion.div>
+                    
+                    {/* Name */}
+                    <h3 className="font-fredoka text-2xl font-bold text-lavender mb-2">
+                      {member.name}
+                    </h3>
+                    
+                    {/* Nickname */}
+                    <p className="font-pacifico text-lg text-pink mb-4">
+                      "{member.nickname}"
+                    </p>
+                    
+                    {/* Fun Fact */}
+                    <p className="font-nunito text-sm text-mint">
+                      {member.funFact}
+                    </p>
+                  </div>
+
+                  {/* Floating sparkles */}
+                  <motion.div
+                    animate={{ y: [-10, 10, -10], x: [-5, 5, -5] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="absolute top-2 right-2 text-2xl"
+                  >
+                    ✨
+                  </motion.div>
+                </motion.div>
+              ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Story Section */}
+      <section id="story" className="py-20 px-4 relative">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="glass rounded-3xl overflow-hidden blur-shadow"
+          >
+            <div className="grid md:grid-cols-2 gap-8 p-8">
+              {/* Image side with aurora overlay */}
+              <motion.div
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="relative rounded-2xl overflow-hidden group"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600"
+                  alt="Our Story"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-lavender/30 to-pink/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </motion.div>
+
+              {/* Text side */}
+              <motion.div
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col justify-center"
+              >
+                <h2 className="font-fredoka text-4xl font-bold text-lavender mb-6 flex items-center gap-3"
+                  style={{
+                    textShadow: '0 0 10px rgba(201, 167, 245, 0.5)'
+                  }}
+                >
+                  <Book className="text-mint" size={40} />
+                  Our Story
+                </h2>
+                <p className="font-nunito text-lg text-mint leading-relaxed mb-4">
+                  Born from a shared dream and unstoppable passion, Purple Aurora Memories is more than a team—it's a family bound by creativity, determination, and the magic of friendship.
+                </p>
+                <p className="font-nunito text-lg text-pink leading-relaxed mb-4">
+                  From late-night brainstorming sessions to celebrating our biggest victories, every moment has been a chapter in our incredible journey together.
+                </p>
+                <p className="font-nunito text-lg text-neonYellow leading-relaxed">
+                  We believe in the power of collaboration, the beauty of diversity, and the magic that happens when passionate people come together to create something extraordinary. ✨
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Achievements Section */}
+      <section id="achievements" className="py-20 px-4 relative">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-fredoka text-5xl font-bold text-lavender mb-4 flex items-center justify-center gap-3"
+              style={{
+                textShadow: '0 0 15px rgba(201, 167, 245, 0.5), 0 0 30px rgba(201, 167, 245, 0.3)'
+              }}
+            >
+              <Award className="text-neonYellow" size={48} />
+              Our Achievements
+            </h2>
+            <p className="font-nunito text-xl text-mint">Celebrating excellence and milestones</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {data.achievements.map((achievement, index) => (
+              <motion.div
+                key={achievement.id}
+                initial={{ opacity: 0, scale: 0.8, y: 50 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="relative group"
+              >
+                {/* CHỈ VIỀN VÀNG BAO QUANH - không có background vàng */}
+                <div className="absolute -inset-0.5 border-4 border-neonYellow rounded-3xl opacity-70 group-hover:opacity-100 group-hover:border-8 transition-all duration-300"
+                  style={{
+                    filter: 'drop-shadow(0 0 10px rgba(255, 228, 122, 0.8))'
+                  }}
+                />
+                
+                <div className="relative glass rounded-3xl p-6 text-center overflow-hidden blur-shadow bg-dark/90 backdrop-blur-xl">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  <motion.div
+                    animate={{ 
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className={`text-7xl mb-4 text-${achievement.color}`}
+                  >
+                    {achievement.icon}
+                  </motion.div>
+
+                  <h3 className="font-fredoka text-2xl font-bold text-lavender mb-2">
+                    {achievement.title}
+                  </h3>
+
+                  <p className={`font-nunito text-sm font-bold text-${achievement.color} ${achievement.color === 'neonYellow' ? 'animate-pulse' : ''}`}>
+                    {achievement.category}
+                  </p>
+
+                  <motion.div
+                    animate={{ opacity: [0.3, 1, 0.3] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="absolute top-2 right-2 text-2xl"
+                  >
+                    ⭐
+                  </motion.div>
+                  
+                  {[...Array(4)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      animate={{ 
+                        y: [-5, 5, -5],
+                        x: [-3, 3, -3],
+                        rotate: [0, 180, 360]
+                      }}
+                      transition={{ 
+                        duration: 3 + i,
+                        repeat: Infinity,
+                        delay: i * 0.5
+                      }}
+                      className={`absolute text-xl text-${achievement.color} ${
+                        i === 0 ? 'top-1 left-4' :
+                        i === 1 ? 'top-1 right-4' :
+                        i === 2 ? 'bottom-1 left-4' :
+                        'bottom-1 right-4'
+                      }`}
+                    >
+                      ✨
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+export default HomePage
+EOF
+
+# Create MemoriesPage.jsx
+cat > src/pages/MemoriesPage.jsx << 'EOF'
+import React, { useState, useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useData } from '../contexts/DataContext'
+import { Play, Star, Image as ImageIcon } from 'lucide-react'
+
+const MemoriesPage = () => {
+  const { data } = useData()
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const containerRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: containerRef })
+
+  return (
+    <div ref={containerRef} className="min-h-screen pt-24 px-4 pb-20">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h1 className="hero-title text-5xl md:text-6xl mb-4 flex items-center justify-center gap-3">
+            <ImageIcon className="text-pink-200" size={60} />
+            Memories & Highlights
+          </h1>
+          <p className="hero-subtitle text-2xl">Our journey captured in moments ✨</p>
+        </motion.div>
+
+        {/* Gallery Section */}
+        <section className="mb-20">
+          <motion.h2
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="section-header mb-12 text-center"
+          >
+            📸 Photo Gallery
+          </motion.h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {data.gallery.map((photo, index) => {
+              const yOffset = useTransform(
+                scrollYProgress,
+                [0, 1],
+                [0, -50 * (index % 3)]
+              )
+
+              return (
+                <motion.div
+                  key={photo.id}
+                  style={{ y: yOffset }}
+                  initial={{ opacity: 0, scale: 0.8, rotateZ: Math.random() * 20 - 10 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                  className="relative group"
+                >
+                  <motion.div
+                    whileHover={{ 
+                      scale: 1.05, 
+                      rotate: 0,
+                      boxShadow: '0 0 40px rgba(201, 167, 245, 0.8)'
+                    }}
+                    className="polaroid glass cursor-pointer"
+                  >
+                    <div className="relative overflow-hidden rounded-lg">
+                      <img
+                        src={photo.url}
+                        alt={photo.caption}
+                        className="w-full h-64 object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-br from-lavender/30 via-pink/30 to-mint/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    </div>
+
+                    <p className="font-pacifico text-center text-midnight mt-3 text-lg">
+                      {photo.caption}
+                    </p>
+                  </motion.div>
+
+                  <motion.div
+                    animate={{ 
+                      y: [-5, 5, -5],
+                      rotate: [-5, 5, -5]
+                    }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="absolute -top-4 -right-4 text-4xl filter drop-shadow-lg z-10"
+                  >
+                    {['💜', '⭐', '✨', '🌙', '💫', '🦋'][index % 6]}
+                  </motion.div>
+                </motion.div>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* Video Section */}
+        <section className="mb-20">
+          <motion.h2
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="section-header mb-12 text-center"
+          >
+            📺 Video Highlights
+          </motion.h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {data.videos.map((video, index) => (
+              <motion.div
+                key={video.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                whileHover={{ scale: 1.02 }}
+                className="relative group"
+              >
+                <div className="glass-dark rounded-3xl p-6 blur-shadow">
+                  <div className="relative border-4 border-lavender-400 rounded-2xl overflow-hidden">
+                    <div className="aspect-video bg-midnight relative">
+                      <iframe
+                        src={video.url}
+                        title={video.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="w-full h-full"
+                      />
+                      
+                      <div className="absolute inset-0 aurora-shimmer opacity-10 pointer-events-none" />
+                    </div>
+
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      whileHover={{ scale: 1.2 }}
+                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                    >
+                      <div className="bg-lavender-200/80 rounded-full p-6 backdrop-blur-sm animate-glow">
+                        <Play size={48} className="text-midnight" fill="currentColor" />
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  <h3 className="card-title text-xl mt-4 text-center">
+                    {video.title}
+                  </h3>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Best Moments Slider */}
+        <section>
+          <motion.h2
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="section-header mb-12 text-center"
+          >
+            <Star className="inline text-neonYellow mr-3" size={40} />
+            Top 10 Best Moments
+          </motion.h2>
+
+          <div className="relative">
+            <div className="overflow-hidden">
+              <motion.div
+                animate={{ x: `${-currentSlide * 100}%` }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                className="flex"
+              >
+                {data.bestMoments.map((moment, index) => (
+                  <div key={moment.id} className="min-w-full px-4">
+                    <motion.div
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="glass-dark rounded-3xl p-8 blur-shadow max-w-2xl mx-auto relative overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 group-hover:from-white/10 transition-all duration-300" />
+                      
+                      <motion.div
+                        animate={{ opacity: [0.7, 1, 0.7] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute top-4 right-4 bg-neonYellow text-midnight font-fredoka text-3xl font-bold w-16 h-16 rounded-full flex items-center justify-center shadow-lg shadow-neonYellow/50"
+                      >
+                        #{moment.rank}
+                      </motion.div>
+
+                      <motion.div
+                        animate={{ rotate: [-5, 5, -5], scale: [1, 1.1, 1] }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                        className="text-8xl mb-4 text-center filter drop-shadow-lg"
+                      >
+                        {moment.sticker}
+                      </motion.div>
+
+                      <h3 className="card-title text-3xl text-center mb-4">
+                        {moment.title}
+                      </h3>
+                      <p className="card-text text-lg text-center leading-relaxed">
+                        {moment.description}
+                      </p>
+
+                      <motion.div
+                        animate={{ y: [-10, 10, -10], opacity: [0.3, 1, 0.3] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute bottom-4 left-4 text-3xl"
+                      >
+                        ✨
+                      </motion.div>
+                    </motion.div>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            <div className="flex justify-center gap-4 mt-8">
+              <button
+                onClick={() => setCurrentSlide(Math.max(0, currentSlide - 1))}
+                disabled={currentSlide === 0}
+                className="glass-dark px-6 py-3 rounded-full font-nunito font-bold text-lavender-100 hover:bg-lavender-200 hover:text-midnight transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                ← Previous
+              </button>
+              <div className="flex items-center gap-2">
+                {data.bestMoments.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      currentSlide === index
+                        ? 'bg-lavender-200 w-8 shadow-lg shadow-lavender-200/50'
+                        : 'bg-lavender-200/30'
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={() => setCurrentSlide(Math.min(data.bestMoments.length - 1, currentSlide + 1))}
+                disabled={currentSlide === data.bestMoments.length - 1}
+                className="glass-dark px-6 py-3 rounded-full font-nunito font-bold text-lavender-100 hover:bg-lavender-200 hover:text-midnight transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next →
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  )
+}
+
+export default MemoriesPage
+EOF
+
+# Create remaining pages (GuestbookPage, MomentsWallPage, AdminPanel)
+# Due to length, I'll create simplified versions
+
+cat > src/pages/GuestbookPage.jsx << 'EOF'
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
+import { useData } from '../contexts/DataContext'
+import { Heart, MessageCircle, Send } from 'lucide-react'
+
+const GuestbookPage = () => {
+  const { data, addItem, updateItem } = useData()
+  const [newEntry, setNewEntry] = useState({ name: '', message: '' })
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (newEntry.name && newEntry.message) {
+      addItem('guestbook', {
+        ...newEntry,
+        date: new Date().toISOString().split('T')[0],
+        likes: 0
+      })
+      setNewEntry({ name: '', message: '' })
+    }
+  }
+
+  const handleLike = (id) => {
+    const entry = data.guestbook.find(e => e.id === id)
+    updateItem('guestbook', id, { likes: entry.likes + 1 })
+  }
+
+  return (
+    <div className="min-h-screen pt-24 px-4 pb-20">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="font-baloo text-6xl font-bold text-lavender neon-text mb-4">
+            ✍️ Guestbook
+          </h1>
+          <p className="font-pacifico text-2xl text-mint">Leave your mark on our journey</p>
+        </motion.div>
+
+        {/* New Entry Form with glass effect */}
+        <motion.form
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          onSubmit={handleSubmit}
+          className="glass rounded-3xl p-8 mb-12 blur-shadow"
+        >
+          <div className="space-y-4">
+            <input
+              type="text"
+              placeholder="Your Name ✨"
+              value={newEntry.name}
+              onChange={(e) => setNewEntry({ ...newEntry, name: e.target.value })}
+              className="w-full px-6 py-4 rounded-full glass border-2 border-lavender/30 focus:border-lavender bg-transparent text-lavender font-nunito text-lg outline-none transition-all duration-300"
+            />
+            <textarea
+              placeholder="Your Message 💜"
+              value={newEntry.message}
+              onChange={(e) => setNewEntry({ ...newEntry, message: e.target.value })}
+              rows="4"
+              className="w-full px-6 py-4 rounded-3xl glass border-2 border-lavender/30 focus:border-lavender bg-transparent text-lavender font-nunito text-lg outline-none resize-none transition-all duration-300"
+            />
+            <motion.button
+              type="submit"
+              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(201, 167, 245, 0.8)' }}
+              whileTap={{ scale: 0.95 }}
+              className="w-full bg-gradient-to-r from-lavender to-pink text-midnight font-fredoka font-bold text-xl py-4 rounded-full flex items-center justify-center gap-3 shadow-lg shadow-lavender/50"
+            >
+              <Send size={24} />
+              Send Message
+            </motion.button>
+          </div>
+        </motion.form>
+
+        {/* Entries with floating stickers and blur effects */}
+        <div className="space-y-6">
+          {data.guestbook.map((entry, index) => (
+            <motion.div
+              key={entry.id}
+              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="glass rounded-3xl p-6 relative overflow-hidden group blur-shadow"
+            >
+              {/* Aurora glow background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-lavender/10 via-pink/10 to-mint/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <div className="relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="font-pacifico text-2xl text-lavender">{entry.name}</h3>
+                    <p className="font-nunito text-sm text-mint">{entry.date}</p>
+                  </div>
+                  <motion.button
+                    onClick={() => handleLike(entry.id)}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="flex items-center gap-2 text-pink"
+                  >
+                    <Heart size={24} fill="currentColor" />
+                    <span className="font-nunito font-bold">{entry.likes}</span>
+                  </motion.button>
+                </div>
+                <p className="font-nunito text-lg text-mint leading-relaxed">
+                  {entry.message}
+                </p>
+              </div>
+
+              {/* Floating sticker */}
+              <motion.div
+                animate={{ y: [-5, 5, -5], rotate: [-10, 10, -10] }}
+                transition={{ duration: 4, repeat: Infinity }}
+                className="absolute bottom-4 right-4 text-3xl opacity-50"
+              >
+                {['💜', '⭐', '✨', '🌙'][index % 4]}
+              </motion.div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default GuestbookPage
+EOF
+
+cat > src/pages/MomentsWallPage.jsx << 'EOF'
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
+import { useData } from '../contexts/DataContext'
+import { Heart, MessageCircle, Plus, X } from 'lucide-react'
+
+const MomentsWallPage = () => {
+  const { data, addItem, updateItem } = useData()
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [newMoment, setNewMoment] = useState({ 
+    image: 'https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=400', 
+    caption: '', 
+    sticker: '💜' 
+  })
+
+  const stickers = ['💜', '⭐', '✨', '🌙', '💫', '🦋', '🌸', '🎀', '💖', '☁️']
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log('Submitting moment:', newMoment)
+    if (newMoment.image && newMoment.caption) {
+      addItem('momentsWall', {
+        ...newMoment,
+        likes: 0,
+        comments: []
+      })
+      setNewMoment({ 
+        image: 'https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=400', 
+        caption: '', 
+        sticker: '💜' 
+      })
+      setShowAddForm(false)
+      alert('Moment added successfully! ✨')
+    } else {
+      alert('Please fill in both image URL and caption!')
+    }
+  }
+
+  const handleLike = (id) => {
+    const moment = data.momentsWall.find(m => m.id === id)
+    if (moment) {
+      updateItem('momentsWall', id, { likes: moment.likes + 1 })
+    }
+  }
+
+  return (
+    <div className="min-h-screen pt-24 px-4 pb-20 relative z-10">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="font-baloo text-6xl font-bold text-lavender neon-text mb-4">
+            📌 Moments Wall
+          </h1>
+          <p className="font-pacifico text-2xl text-mint">Our daily magic captured</p>
+        </motion.div>
+
+        {/* Add Moment Button */}
+        <div className="flex justify-center mb-12">
+          <motion.button
+            onClick={() => setShowAddForm(!showAddForm)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="glass px-8 py-4 rounded-full font-fredoka font-bold text-xl text-lavender border-2 border-lavender hover:bg-lavender hover:text-midnight transition-all duration-300 flex items-center gap-3 relative z-20"
+          >
+            {showAddForm ? <X size={24} /> : <Plus size={24} />}
+            {showAddForm ? 'Close Form' : 'Add New Moment'}
+          </motion.button>
+        </div>
+
+        {/* Add Form with glass effect and aurora glow */}
+        {showAddForm && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass rounded-3xl p-8 mb-12 blur-shadow relative z-20"
+          >
+            <h2 className="font-fredoka text-3xl text-lavender mb-6 text-center">
+              ✨ Add New Moment
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label className="block font-nunito text-mint mb-2">Image URL</label>
+                <input
+                  type="url"
+                  placeholder="https://example.com/image.jpg"
+                  value={newMoment.image}
+                  onChange={(e) => setNewMoment({ ...newMoment, image: e.target.value })}
+                  className="w-full px-6 py-4 rounded-full glass border-2 border-lavender/30 focus:border-lavender bg-transparent text-lavender font-nunito text-lg outline-none"
+                  required
+                />
+                <p className="text-sm text-mint/60 mt-2">Paste a direct image URL</p>
+              </div>
+              
+              <div>
+                <label className="block font-nunito text-mint mb-2">Caption</label>
+                <input
+                  type="text"
+                  placeholder="What's this moment about? 💜"
+                  value={newMoment.caption}
+                  onChange={(e) => setNewMoment({ ...newMoment, caption: e.target.value })}
+                  className="w-full px-6 py-4 rounded-full glass border-2 border-lavender/30 focus:border-lavender bg-transparent text-lavender font-nunito text-lg outline-none"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block font-nunito text-mint mb-2">Choose a sticker:</label>
+                <div className="flex gap-3 flex-wrap justify-center">
+                  {stickers.map(sticker => (
+                    <button
+                      key={sticker}
+                      type="button"
+                      onClick={() => setNewMoment({ ...newMoment, sticker })}
+                      className={`text-4xl p-3 rounded-lg transition-all duration-200 ${
+                        newMoment.sticker === sticker 
+                          ? 'bg-lavender/30 transform scale-110 border-2 border-lavender' 
+                          : 'hover:bg-lavender/10 border-2 border-transparent'
+                      }`}
+                    >
+                      {sticker}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(255, 184, 245, 0.8)' }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex-1 bg-gradient-to-r from-pink to-lavender text-midnight font-fredoka font-bold text-xl py-4 rounded-full shadow-lg"
+                >
+                  Post Moment ✨
+                </motion.button>
+              </div>
+            </form>
+            
+            {/* Preview */}
+            {newMoment.image && (
+              <div className="mt-8 pt-8 border-t border-lavender/20">
+                <h3 className="font-nunito text-lavender mb-4 text-center">Preview:</h3>
+                <div className="glass rounded-2xl p-4 max-w-xs mx-auto">
+                  <div className="relative h-48 overflow-hidden rounded-lg mb-4">
+                    <img
+                      src={newMoment.image}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-2 right-2 text-4xl">
+                      {newMoment.sticker}
+                    </div>
+                  </div>
+                  <p className="font-nunito text-lavender text-center">
+                    {newMoment.caption || 'Your caption will appear here'}
+                  </p>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* Moments Grid with glass morphism */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {data.momentsWall && data.momentsWall.length > 0 ? (
+            data.momentsWall.map((moment, index) => (
+              <motion.div
+                key={moment.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="glass rounded-3xl overflow-hidden blur-shadow group relative z-10"
+              >
+                {/* Image with aurora overlay and blur effect */}
+                <div className="relative h-64 overflow-hidden">
+                  <img
+                    src={moment.image}
+                    alt={moment.caption}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-lavender/20 via-pink/20 to-mint/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  {/* Floating sticker */}
+                  <motion.div
+                    animate={{ rotate: [-5, 5, -5], scale: [1, 1.1, 1] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="absolute top-4 right-4 text-5xl filter drop-shadow-lg"
+                  >
+                    {moment.sticker}
+                  </motion.div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6">
+                  <p className="font-nunito text-lg text-lavender mb-4">
+                    {moment.caption}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <motion.button
+                      onClick={() => handleLike(moment.id)}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="flex items-center gap-2 text-pink"
+                    >
+                      <Heart size={24} fill="currentColor" />
+                      <span className="font-nunito font-bold">{moment.likes}</span>
+                    </motion.button>
+                    <div className="flex items-center gap-2 text-mint">
+                      <MessageCircle size={24} />
+                      <span className="font-nunito font-bold">{moment.comments?.length || 0}</span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="md:col-span-2 lg:col-span-3 glass rounded-3xl p-12 text-center"
+            >
+              <div className="text-8xl mb-6">📌</div>
+              <h3 className="font-fredoka text-3xl text-lavender mb-4">
+                No moments yet
+              </h3>
+              <p className="font-nunito text-lg text-mint mb-6">
+                Be the first to share a special moment! Click "Add New Moment" above.
+              </p>
+              <motion.button
+                onClick={() => setShowAddForm(true)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="glass px-8 py-3 rounded-full text-lavender font-nunito font-bold border-2 border-lavender hover:bg-lavender hover:text-midnight"
+              >
+                Create First Moment
+              </motion.button>
+            </motion.div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default MomentsWallPage
+EOF
+
+cat > src/pages/AdminPanel.jsx << 'EOF'
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { useData } from '../contexts/DataContext'
+import { 
+  Lock, Trash2, Edit, X, Plus, Save, Upload, 
+  User, AlertCircle, Loader, Image, Check, Copy,
+  Video, Link as LinkIcon, Settings, Palette, Eye, EyeOff,
+  Type
+} from 'lucide-react'
+import { adminUploadImage, validateImageFile } from '../services/adminUpload'
+
+const AdminPanel = () => {
+  const { data, addItem, updateItem, deleteItem, updateSiteSettings } = useData()
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const saved = localStorage.getItem('adminLoggedIn')
+    return saved === 'true'
+  })
+  
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [activeTab, setActiveTab] = useState('members')
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [editingId, setEditingId] = useState(null)
+  const [formData, setFormData] = useState({})
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [uploadResult, setUploadResult] = useState(null)
+  const [copySuccess, setCopySuccess] = useState(false)
+
+  // LƯU TRẠNG THÁI ĐĂNG NHẬP
+  useEffect(() => {
+    localStorage.setItem('adminLoggedIn', isLoggedIn.toString())
+  }, [isLoggedIn])
+
+  // XÓA TRẠNG THÁI ĐĂNG NHẬP SAU 24H
+  useEffect(() => {
+    if (isLoggedIn) {
+      const timeout = setTimeout(() => {
+        setIsLoggedIn(false)
+        localStorage.removeItem('adminLoggedIn')
+        alert('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.')
+      }, 24 * 60 * 60 * 1000)
+      
+      return () => clearTimeout(timeout)
+    }
+  }, [isLoggedIn])
+
+  // ================== UPLOAD ẢNH ==================
+  const handleImageUpload = async (e, fieldName = 'url') => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    const validation = validateImageFile(file)
+    if (!validation.valid) {
+      alert(validation.error)
+      return
+    }
+
+    setUploading(true)
+    setUploadProgress(0)
+    setUploadResult(null)
+
+    const fakeProgress = setInterval(() => {
+      setUploadProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(fakeProgress)
+          return 90
+        }
+        return prev + 10
+      })
+    }, 300)
+
+    try {
+      const result = await adminUploadImage(file)
+      
+      clearInterval(fakeProgress)
+      setUploadProgress(100)
+      
+      if (result.success) {
+        setFormData(prev => ({
+          ...prev,
+          [fieldName]: result.url
+        }))
+        
+        setUploadResult({
+          url: result.url,
+          thumbnail: result.thumb || result.url,
+          size: result.size,
+          isTemporary: result.isTemporary || false
+        })
+        
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(result.url)
+          setCopySuccess(true)
+          setTimeout(() => setCopySuccess(false), 3000)
+        }
+        
+      } else {
+        throw new Error('Upload không thành công')
+      }
+      
+    } catch (error) {
+      console.error('Upload failed:', error)
+      
+      const blobUrl = URL.createObjectURL(file)
+      setFormData(prev => ({
+        ...prev,
+        [fieldName]: blobUrl
+      }))
+      setUploadResult({
+        url: blobUrl,
+        isTemporary: true
+      })
+    } finally {
+      setUploading(false)
+      setTimeout(() => setUploadProgress(0), 1000)
+    }
+  }
+
+  // ================== LOGIN ==================
+  const handleLogin = (e) => {
+    e.preventDefault()
+    if (password === 'purple2024') {
+      setIsLoggedIn(true)
+      setPassword('')
+      localStorage.setItem('adminLoginTime', Date.now().toString())
+    } else {
+      alert('Sai mật khẩu!')
+    }
+  }
+
+  const handleLogout = () => {
+    setIsLoggedIn(false)
+    localStorage.removeItem('adminLoggedIn')
+    localStorage.removeItem('adminLoginTime')
+  }
+
+  // ================== FORM SUBMIT ==================
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    
+    try {
+      if (activeTab === 'siteSettings') {
+        updateSiteSettings(formData)
+        alert('✅ Cài đật site đã được cập nhật!')
+      } else if (editingId) {
+        updateItem(activeTab, editingId, formData)
+        alert('✅ Đã cập nhật thành công!')
+        setEditingId(null)
+      } else {
+        addItem(activeTab, formData)
+        alert('✅ Đã thêm mới thành công!')
+      }
+      setFormData({})
+      setShowAddForm(false)
+      setUploadResult(null)
+    } catch (error) {
+      alert(`❌ Lỗi: ${error.message}`)
+    }
+  }
+
+  const startEdit = (item) => {
+    setEditingId(item.id)
+    setFormData(item)
+    setShowAddForm(true)
+    setUploadResult(null)
+  }
+
+  const cancelEdit = () => {
+    setEditingId(null)
+    setFormData({})
+    setShowAddForm(false)
+    setUploadResult(null)
+  }
+
+  // ================== FORMAT YOUTUBE URL ==================
+  const formatYouTubeUrl = (url) => {
+    if (!url) return ''
+    
+    if (url.includes('youtu.be/')) {
+      const videoId = url.split('youtu.be/')[1]?.split('?')[0]
+      return `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`
+    }
+    
+    if (url.includes('youtube.com/watch?v=')) {
+      const videoId = url.split('v=')[1]?.split('&')[0]
+      return `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`
+    }
+    
+    return url
+  }
+
+  // ================== RENDER FIELD ==================
+  const renderField = (field) => {
+    const fieldValue = formData[field.name] || ''
+    const isImageField = field.name.includes('url') || 
+                        field.name.includes('image') || 
+                        field.name.includes('avatar')
+    const isVideoField = activeTab === 'videos'
+
+    // FIELD VIDEO - ĐÃ SỬA: URL không bắt buộc ở tiêu đề
+    if (isVideoField) {
+      if (field.name === 'url') {
+        return (
+          <div className="space-y-4">
+            <div className="relative">
+              <LinkIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lavender-300/60" size={20} />
+              <input
+                type="url"
+                value={fieldValue}
+                onChange={(e) => setFormData({...formData, [field.name]: e.target.value})}
+                required={field.required}
+                placeholder="https://youtube.com/watch?v=... hoặc https://youtu.be/..."
+                className="w-full pl-12 pr-4 py-3 rounded-lg border-2 border-lavender-300/30 focus:border-lavender-300 bg-dark-lighter/80 text-lavender-100 font-nunito outline-none placeholder:text-lavender-300/40 transition-all duration-300"
+              />
+            </div>
+            
+            {/* Video Preview */}
+            {fieldValue && fieldValue.includes('youtube') && (
+              <div className="mt-4 p-4 rounded-lg bg-lavender-300/5 border border-lavender-300/20">
+                <p className="font-nunito text-sm text-mint-200 mb-2 flex items-center gap-2">
+                  <Video size={16} />
+                  <span className="font-bold">Preview:</span> Video sẽ hiển thị như bên dưới
+                </p>
+                <div className="aspect-video rounded-lg overflow-hidden bg-dark border border-lavender-300/20">
+                  <iframe
+                    src={formatYouTubeUrl(fieldValue)}
+                    title="Video preview"
+                    className="w-full h-full"
+                    allowFullScreen
+                    frameBorder="0"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )
+      } else if (field.name === 'title') {
+        // Tiêu đề video - KHÔNG PHẢI URL
+        return (
+          <div className="space-y-2">
+            <div className="relative">
+              <Type className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lavender-300/60" size={20} />
+              <input
+                type="text"
+                value={fieldValue}
+                onChange={(e) => setFormData({...formData, [field.name]: e.target.value})}
+                required={field.required}
+                placeholder="Nhập tiêu đề video..."
+                className="w-full pl-12 pr-4 py-3 rounded-lg border-2 border-lavender-300/30 focus:border-lavender-300 bg-dark-lighter/80 text-lavender-100 font-nunito outline-none placeholder:text-lavender-300/40 transition-all duration-300"
+              />
+            </div>
+            <p className="font-nunito text-xs text-lavender-300/60">
+              Tiêu đề sẽ hiển thị phía trên video
+            </p>
+          </div>
+        )
+      }
+    }
+
+    // FIELD ẢNH
+    if (isImageField) {
+      return (
+        <div className="space-y-4">
+          {/* Upload Button */}
+          <div className="relative">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleImageUpload(e, field.name)}
+              disabled={uploading}
+              className="hidden"
+              id={`file-upload-${field.name}`}
+            />
+            
+            <label
+              htmlFor={`file-upload-${field.name}`}
+              className={`
+                flex items-center justify-center gap-3 w-full px-6 py-4 rounded-xl 
+                border-2 border-dashed cursor-pointer transition-all duration-300
+                ${uploading 
+                  ? 'border-lavender-300 bg-lavender-300/10 text-lavender-300' 
+                  : 'border-lavender-300/40 hover:border-lavender-300 hover:bg-lavender-300/5 text-lavender-300'
+                }
+              `}
+            >
+              {uploading ? (
+                <>
+                  <Loader className="animate-spin" size={24} />
+                  <span className="font-nunito">
+                    Đang upload... {uploadProgress}%
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Upload size={24} />
+                  <span className="font-nunito">
+                    {fieldValue ? 'Chọn ảnh khác' : `Chọn ${field.label.toLowerCase()}`}
+                  </span>
+                </>
+              )}
+            </label>
+            
+            {/* Progress Bar */}
+            {uploading && (
+              <div className="mt-3">
+                <div className="h-2 bg-lavender-300/20 rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-lavender-300 to-pink-300"
+                    initial={{ width: '0%' }}
+                    animate={{ width: `${uploadProgress}%` }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {/* Upload Result */}
+          {uploadResult && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 rounded-lg bg-gradient-to-r from-lavender-300/10 to-pink-300/10 border border-lavender-300/20"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Check className="text-mint-300" size={20} />
+                    <span className="font-nunito font-bold text-mint-300">
+                      {uploadResult.isTemporary ? 'Ảnh tạm thời' : 'Upload thành công!'}
+                    </span>
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      uploadResult.isTemporary 
+                        ? 'bg-amber-500/20 text-amber-300' 
+                        : 'bg-mint-300/20 text-mint-300'
+                    }`}>
+                      {uploadResult.isTemporary ? 'Chỉ hiển thị trên máy này' : 'Mọi người đều xem được'}
+                    </span>
+                  </div>
+                  
+                  {/* URL Display */}
+                  <div className="mb-3">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        readOnly
+                        value={uploadResult.url}
+                        className="flex-1 px-3 py-2 rounded bg-dark/60 text-lavender-100 text-sm truncate border border-lavender-300/20"
+                      />
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(uploadResult.url)
+                          setCopySuccess(true)
+                          setTimeout(() => setCopySuccess(false), 2000)
+                        }}
+                        className="px-3 py-2 rounded-lg bg-lavender-300/20 hover:bg-lavender-300/30 text-lavender-300 font-nunito text-sm flex items-center gap-1 transition-colors"
+                      >
+                        <Copy size={14} />
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Thumbnail Preview */}
+                {uploadResult.thumbnail && (
+                  <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-lavender-300/30">
+                    <img
+                      src={uploadResult.thumbnail}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+          
+          {/* Manual URL Input */}
+          <div className="mt-4">
+            <p className="font-nunito text-sm text-mint-200 mb-2">Hoặc nhập URL ảnh:</p>
+            <input
+              type="url"
+              value={fieldValue}
+              onChange={(e) => setFormData({...formData, [field.name]: e.target.value})}
+              placeholder="https://example.com/image.jpg"
+              className="w-full px-4 py-3 rounded-lg border-2 border-lavender-300/30 focus:border-lavender-300 bg-dark-lighter/80 text-lavender-100 font-nunito outline-none placeholder:text-lavender-300/40 transition-all duration-300"
+            />
+          </div>
+        </div>
+      )
+    }
+
+    // FIELD THÔNG THƯỜNG - MÀU CHỮ TỐT HƠN
+    if (field.type === 'select') {
+      return (
+        <select
+          value={fieldValue}
+          onChange={(e) => setFormData({...formData, [field.name]: e.target.value})}
+          required={field.required}
+          className="w-full px-4 py-3 rounded-lg border-2 border-lavender-300/30 focus:border-lavender-300 bg-dark-lighter/80 text-lavender-100 font-nunito outline-none transition-all duration-300"
+        >
+          <option value="" className="bg-dark">Chọn...</option>
+          {field.options.map(opt => (
+            <option key={opt.value} value={opt.value} className="bg-dark">
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      )
+    } else if (field.type === 'textarea') {
+      return (
+        <textarea
+          value={fieldValue}
+          onChange={(e) => setFormData({...formData, [field.name]: e.target.value})}
+          required={field.required}
+          rows="4"
+          className="w-full px-4 py-3 rounded-lg border-2 border-lavender-300/30 focus:border-lavender-300 bg-dark-lighter/80 text-lavender-100 font-nunito outline-none resize-none placeholder:text-lavender-300/40 transition-all duration-300"
+          placeholder={field.placeholder || `Nhập ${field.label.toLowerCase()}...`}
+        />
+      )
+    } else {
+      return (
+        <input
+          type={field.type}
+          value={fieldValue}
+          onChange={(e) => setFormData({...formData, [field.name]: e.target.value})}
+          required={field.required}
+          placeholder={field.placeholder || `Nhập ${field.label.toLowerCase()}...`}
+          className="w-full px-4 py-3 rounded-lg border-2 border-lavender-300/30 focus:border-lavender-300 bg-dark-lighter/80 text-lavender-100 font-nunito outline-none placeholder:text-lavender-300/40 transition-all duration-300"
+        />
+      )
+    }
+  }
+
+  // ================== GET FORM FIELDS ==================
+  const getFormFields = () => {
+    switch(activeTab) {
+      case 'siteSettings':
+        return [
+          { 
+            name: 'logoUrl', 
+            label: 'Logo Website', 
+            type: 'file', 
+            required: true,
+            accept: 'image/*'
+          },
+          { 
+            name: 'siteName', 
+            label: 'Tên Website', 
+            type: 'text', 
+            required: true,
+            placeholder: 'Nhập tên website...'
+          },
+          { 
+            name: 'tagline', 
+            label: 'Khẩu Hiệu', 
+            type: 'text', 
+            required: true,
+            placeholder: 'Nhập khẩu hiệu của website...'
+          }
+        ]
+      case 'members':
+        return [
+          { name: 'name', label: 'Tên thành viên', type: 'text', required: true },
+          { name: 'nickname', label: 'Biệt danh', type: 'text', required: true },
+          { 
+            name: 'avatarUrl', 
+            label: 'Ảnh đại diện', 
+            type: 'file', 
+            required: true,
+            accept: 'image/*'
+          },
+          { name: 'avatar', label: 'Emoji (tùy chọn)', type: 'text', placeholder: '👑, ⭐, ...' },
+          { name: 'funFact', label: 'Điều thú vị', type: 'text', required: true },
+          { 
+            name: 'role', 
+            label: 'Vai trò', 
+            type: 'select', 
+            options: [
+              { value: 'lead', label: '👑 Leader' },
+              { value: 'member', label: '⭐ Member' }
+            ], 
+            required: true 
+          }
+        ]
+      case 'gallery':
+        return [
+          { 
+            name: 'url', 
+            label: 'Ảnh', 
+            type: 'file', 
+            required: true,
+            accept: 'image/*'
+          },
+          { name: 'caption', label: 'Chú thích ảnh', type: 'text', required: true }
+        ]
+      case 'videos':
+        return [
+          { 
+            name: 'url', 
+            label: 'Link YouTube', 
+            type: 'url', 
+            required: true,
+            placeholder: 'https://youtube.com/watch?v=... hoặc https://youtu.be/...'
+          },
+          { 
+            name: 'title', 
+            label: 'Tiêu đề video', 
+            type: 'text',  // ĐÃ SỬA: type="text" thay vì "url"
+            required: true,
+            placeholder: 'Nhập tiêu đề video...'
+          }
+        ]
+      case 'momentsWall':
+        return [
+          { 
+            name: 'image', 
+            label: 'Ảnh khoảnh khắc', 
+            type: 'file', 
+            required: true,
+            accept: 'image/*'
+          },
+          { name: 'caption', label: 'Chú thích', type: 'text', required: true },
+          { name: 'sticker', label: 'Sticker emoji', type: 'text', required: true, placeholder: '💫, ✨, 🌟, ...' }
+        ]
+      case 'achievements':
+        return [
+          { name: 'title', label: 'Tiêu đề thành tích', type: 'text', required: true },
+          { name: 'category', label: 'Danh mục', type: 'text', required: true },
+          { name: 'icon', label: 'Icon emoji', type: 'text', required: true, placeholder: '🏆, 🎨, 🚀, ...' },
+          { 
+            name: 'color', 
+            label: 'Màu sắc', 
+            type: 'select', 
+            options: [
+              { value: 'lavender', label: '💜 Lavender' },
+              { value: 'pink', label: '💖 Pink' },
+              { value: 'mint', label: '💚 Mint' },
+              { value: 'neonYellow', label: '💛 Neon Yellow' }
+            ], 
+            required: true 
+          }
+        ]
+      case 'guestbook':
+        return [
+          { name: 'name', label: 'Tên khách', type: 'text', required: true },
+          { name: 'message', label: 'Lời nhắn', type: 'textarea', required: true }
+        ]
+      default:
+        return []
+    }
+  }
+
+  // ================== RENDER FORM ==================
+  const renderForm = () => {
+    const fields = getFormFields()
+    
+    return (
+      <motion.form
+        initial={{ opacity: 0, height: 0 }}
+        animate={{ opacity: 1, height: 'auto' }}
+        onSubmit={handleSubmit}
+        className="rounded-2xl p-6 mb-6 space-y-6 border border-lavender-300/20"
+        style={{
+          background: 'linear-gradient(135deg, rgba(26, 11, 58, 0.95) 0%, rgba(10, 4, 26, 0.9) 100%)',
+          backdropFilter: 'blur(15px)',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)'
+        }}
+      >
+        <h3 className="font-fredoka text-2xl text-lavender-100 mb-4 flex items-center gap-2">
+          <Palette size={24} />
+          {activeTab === 'siteSettings' ? 'Cài đặt website' : 
+           editingId ? 'Chỉnh sửa' : 'Thêm mới'}
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {fields.map((field) => (
+            <div 
+              key={field.name} 
+              className={field.type === 'textarea' || field.type === 'file' || field.type === 'url' ? 'md:col-span-2' : ''}
+            >
+              <label className="block font-nunito font-semibold text-mint-200 mb-2">
+                {field.label} {field.required ? ' *' : ''}
+              </label>
+              {renderField(field)}
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-3 pt-4">
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex-1 bg-gradient-to-r from-lavender-300 to-pink-300 text-dark font-nunito font-bold py-3 rounded-full flex items-center justify-center gap-2 shadow-lg shadow-lavender-300/20 transition-all duration-300 hover:shadow-xl hover:shadow-lavender-300/30"
+            disabled={uploading}
+          >
+            {uploading ? (
+              <>
+                <Loader className="animate-spin" size={20} />
+                Đang upload...
+              </>
+            ) : (
+              <>
+                <Save size={20} />
+                {activeTab === 'siteSettings' ? 'Lưu cài đặt' : editingId ? 'Cập nhật' : 'Tạo mới'}
+              </>
+            )}
+          </motion.button>
+          <motion.button
+            type="button"
+            onClick={cancelEdit}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 border-2 border-lavender-300/40 bg-lavender-300/10 text-lavender-300 font-nunito font-bold py-3 rounded-full flex items-center gap-2 hover:bg-lavender-300/20 transition-all duration-300"
+            disabled={uploading}
+          >
+            <X size={20} />
+            Hủy
+          </motion.button>
+        </div>
+        
+        {copySuccess && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-sm text-mint-300 animate-pulse"
+          >
+            ✓ Đã copy link ảnh vào clipboard
+          </motion.div>
+        )}
+      </motion.form>
+    )
+  }
+
+  // ================== RENDER CONTENT DISPLAY ==================
+  const renderContentDisplay = () => {
+    if (activeTab === 'siteSettings') {
+      return (
+        <div className="rounded-2xl p-6 border border-lavender-300/20" style={{
+          background: 'linear-gradient(135deg, rgba(26, 11, 58, 0.9) 0%, rgba(10, 4, 26, 0.8) 100%)',
+          backdropFilter: 'blur(10px)'
+        }}>
+          <h3 className="font-fredoka text-2xl text-lavender-100 mb-6 flex items-center gap-2">
+            <Settings size={24} />
+            Cài đặt website hiện tại
+          </h3>
+          
+          <div className="space-y-8">
+            <div className="text-center">
+              <p className="font-nunito text-mint-200 text-sm mb-3">Logo website:</p>
+              <div className="inline-block relative">
+                <img
+                  src={data.siteSettings?.logoUrl}
+                  alt="Logo"
+                  className="w-40 h-40 object-contain rounded-full mx-auto border-4 border-lavender-300/30"
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/200/1A0B3A/C9A7F5?text=No+Logo'
+                  }}
+                />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-lavender-300/10 to-pink-300/10"></div>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <p className="font-nunito text-mint-200 text-sm mb-2">Tên website:</p>
+              <h4 className="font-baloo text-3xl font-bold text-lavender-50">
+                {data.siteSettings?.siteName}
+              </h4>
+            </div>
+            
+            <div className="text-center">
+              <p className="font-nunito text-mint-200 text-sm mb-2">Khẩu hiệu:</p>
+              <p className="font-pacifico text-2xl text-pink-100">
+                {data.siteSettings?.tagline}
+              </p>
+            </div>
+            
+            <div className="mt-8 p-4 rounded-lg" style={{
+              background: 'rgba(201, 167, 245, 0.05)',
+              border: '1px solid rgba(201, 167, 245, 0.2)'
+            }}>
+              <p className="font-nunito text-sm text-lavender-100 text-center">
+                Nhấn nút "Chỉnh sửa" bên trên để thay đổi cài đặt website
+              </p>
+            </div>
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="space-y-4">
+          {data[activeTab] && data[activeTab].length > 0 ? (
+            data[activeTab].map((item, index) => (
+              <div key={item.id || index} className="rounded-xl p-4 flex items-start justify-between gap-4 hover:bg-lavender-300/5 transition-all duration-300 border border-lavender-300/10" style={{
+                background: 'rgba(26, 11, 58, 0.5)'
+              }}>
+                <div className="flex items-start gap-4 flex-1">
+                  {/* Preview Image */}
+                  {(activeTab === 'members' && item.avatarUrl) ? (
+                    <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-lavender-300/30">
+                      <img 
+                        src={item.avatarUrl} 
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (item.url || item.image) ? (
+                    <div className="relative w-20 h-20 rounded-lg overflow-hidden border-2 border-lavender-300/30">
+                      <img 
+                        src={item.url || item.image} 
+                        alt="" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (item.avatar || item.icon || item.sticker) && !item.url && !item.image && !item.avatarUrl ? (
+                    <div className="text-3xl text-lavender-300">{item.avatar || item.icon || item.sticker}</div>
+                  ) : null}
+                  
+                  {/* Content */}
+                  <div className="flex-1">
+                    <h4 className="font-nunito font-bold text-lavender-50 text-lg">
+                      {item.name || item.title || item.caption || 'Không có tiêu đề'}
+                    </h4>
+                    {item.nickname && (
+                      <p className="font-pacifico text-pink-200 text-sm mt-1">"{item.nickname}"</p>
+                    )}
+                    {item.category && (
+                      <p className="font-nunito text-mint-200 text-sm mt-1">{item.category}</p>
+                    )}
+                    <p className="font-nunito text-lavender-200 text-sm mt-2">
+                      {item.funFact || item.description || item.message || 'Không có mô tả'}
+                    </p>
+                    {activeTab === 'members' && item.role && (
+                      <span className="inline-block mt-2 px-3 py-1 rounded-full text-xs font-nunito font-bold bg-lavender-300/20 text-lavender-300">
+                        {item.role === 'lead' ? '👑 Leader' : '⭐ Member'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Actions */}
+                <div className="flex gap-2">
+                  <motion.button
+                    onClick={() => startEdit(item)}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="p-2 rounded-lg border border-mint-300/20 text-mint-300 hover:bg-mint-300/10 transition-all duration-300"
+                    title="Chỉnh sửa"
+                  >
+                    <Edit size={18} />
+                  </motion.button>
+                  <motion.button
+                    onClick={() => {
+                      if (window.confirm('Bạn có chắc muốn xóa mục này?')) {
+                        deleteItem(activeTab, item.id)
+                      }
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="p-2 rounded-lg border border-pink-300/20 text-pink-300 hover:bg-pink-300/10 transition-all duration-300"
+                    title="Xóa"
+                  >
+                    <Trash2 size={18} />
+                  </motion.button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-12 rounded-2xl border border-lavender-300/20" style={{
+              background: 'rgba(26, 11, 58, 0.6)'
+            }}>
+              <div className="text-5xl mb-4 opacity-50">
+                {activeTab === 'members' ? '👥' :
+                 activeTab === 'gallery' ? '📸' :
+                 activeTab === 'videos' ? '🎥' :
+                 activeTab === 'momentsWall' ? '💫' :
+                 activeTab === 'achievements' ? '🏆' :
+                 activeTab === 'guestbook' ? '📝' : '📭'}
+              </div>
+              <p className="font-nunito text-lavender-100 text-lg">Chưa có mục nào</p>
+              <p className="font-nunito text-mint-200 text-sm mt-2">Hãy thêm mới để bắt đầu!</p>
+            </div>
+          )}
+        </div>
+      )
+    }
+  }
+
+  // ================== LOGIN SCREEN ==================
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4" style={{
+        background: 'linear-gradient(135deg, #0A041A 0%, #1A0B3A 50%, #0A041A 100%)'
+      }}>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="rounded-3xl p-8 max-w-md w-full blur-shadow border border-lavender-300/20"
+          style={{
+            background: 'rgba(10, 4, 26, 0.95)',
+            backdropFilter: 'blur(10px)'
+          }}
+        >
+          <div className="text-center mb-8">
+            <motion.div
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="text-6xl mb-4 text-lavender-300"
+            >
+              🔐
+            </motion.div>
+            <h2 className="font-baloo text-4xl font-bold text-lavender-50 mb-2">
+              Admin Login
+            </h2>
+            <p className="font-nunito text-mint-200">Nhập mật khẩu để vào Admin Panel</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Nhập mật khẩu ✨"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-6 py-4 rounded-full border-2 border-lavender-300/30 focus:border-lavender-300 bg-dark-lighter/80 text-lavender-100 font-nunito text-lg outline-none pr-12 placeholder:text-lavender-300/40 transition-all duration-300"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-lavender-300/60 hover:text-lavender-300 transition-colors"
+              >
+                {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
+              </button>
+            </div>
+            <motion.button
+              type="submit"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-full bg-gradient-to-r from-lavender-300 to-pink-300 text-dark font-fredoka font-bold text-xl py-4 rounded-full flex items-center justify-center gap-3 shadow-lg shadow-lavender-300/20 transition-all duration-300 hover:shadow-xl hover:shadow-lavender-300/30"
+            >
+              <Lock size={24} />
+              Đăng nhập
+            </motion.button>
+          </form>
+          
+          <div className="mt-6 pt-6 border-t border-lavender-300/20">
+            <p className="font-nunito text-sm text-lavender-100 text-center">
+              Mật khẩu mặc định: <code className="bg-lavender-300/10 px-2 py-1 rounded text-lavender-300">purple2024</code>
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    )
+  }
+
+  // ================== MAIN ADMIN PANEL ==================
+  return (
+    <div className="min-h-screen pt-24 px-4 pb-20" style={{
+      background: 'linear-gradient(135deg, #0A041A 0%, #1A0B3A 50%, #0A041A 100%)'
+    }}>
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="font-baloo text-6xl font-bold text-lavender-50 mb-4"
+            style={{
+              textShadow: '0 0 20px rgba(201, 167, 245, 0.5)'
+            }}
+          >
+            ⚙️ Admin Dashboard
+          </h1>
+          <p className="font-pacifico text-2xl text-mint-200">Quản lý mọi thứ trên website ✨</p>
+          
+          {/* Login Status */}
+          <div className="mt-4 inline-flex items-center gap-4 p-3 rounded-full" style={{
+            background: 'rgba(26, 11, 58, 0.5)', 
+            border: '1px solid rgba(201, 167, 245, 0.2)'
+          }}>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-mint-300 animate-pulse"></div>
+              <span className="font-nunito text-sm text-mint-200">Đã đăng nhập</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="text-xs px-3 py-1 rounded-full border border-lavender-300/40 bg-lavender-300/10 text-lavender-300 hover:bg-lavender-300/20 transition-colors"
+            >
+              Đăng xuất
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Tabs */}
+        <div className="flex gap-3 mb-8 overflow-x-auto pb-2">
+          {[
+            { id: 'siteSettings', label: '⚙️ Cài đặt', icon: '⚙️' },
+            { id: 'members', label: '👥 Thành viên', icon: '👥' },
+            { id: 'achievements', label: '🏆 Thành tích', icon: '🏆' },
+            { id: 'gallery', label: '📸 Gallery', icon: '📸' },
+            { id: 'videos', label: '🎬 Videos', icon: '🎬' },
+            { id: 'guestbook', label: '📝 Lưu bút', icon: '📝' },
+            { id: 'momentsWall', label: '💫 Khoảnh khắc', icon: '💫' }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => {
+                setActiveTab(tab.id)
+                setShowAddForm(false)
+                setEditingId(null)
+                setFormData({})
+                setUploadResult(null)
+              }}
+              className={`px-6 py-3 rounded-full font-nunito font-bold whitespace-nowrap transition-all duration-300 border-2 ${
+                activeTab === tab.id
+                  ? 'bg-gradient-to-r from-lavender-300/20 to-pink-300/10 border-lavender-300/30 shadow-lg shadow-lavender-300/10 text-lavender-50'
+                  : 'border-lavender-300/20 hover:border-lavender-300/40 text-lavender-200 bg-dark-lighter/50'
+              }`}
+            >
+              <span className="mr-2">{tab.icon}</span>
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Main Content */}
+        <div className="rounded-2xl p-6 blur-shadow border border-lavender-300/20" style={{
+          background: 'rgba(26, 11, 58, 0.7)',
+          border: '1px solid rgba(201, 167, 245, 0.2)'
+        }}>
+          {/* Header với Add/Edit Button */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-fredoka text-3xl font-bold text-lavender-50"
+              style={{
+                textShadow: '0 0 10px rgba(201, 167, 245, 0.3)'
+              }}
+            >
+              {activeTab === 'siteSettings' ? '⚙️ Cài đặt website' : 
+               `${['👥', '🏆', '📸', '🎬', '📝', '💫'][
+                 ['members', 'achievements', 'gallery', 'videos', 'guestbook', 'momentsWall'].indexOf(activeTab)
+               ]} ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`}
+            </h2>
+            
+            {activeTab !== 'siteSettings' ? (
+              <motion.button
+                onClick={() => {
+                  setShowAddForm(!showAddForm)
+                  setEditingId(null)
+                  setFormData({})
+                  setUploadResult(null)
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-6 py-3 rounded-full font-nunito font-bold flex items-center gap-2 shadow-lg border-2 ${
+                  showAddForm 
+                    ? 'bg-gradient-to-r from-pink-300 to-lavender-300 text-dark border-transparent' 
+                    : 'bg-gradient-to-r from-lavender-300 to-pink-300 text-dark border-transparent'
+                } transition-all duration-300 hover:shadow-xl hover:shadow-lavender-300/30`}
+              >
+                <Plus size={20} />
+                {showAddForm ? 'Đóng form' : 'Thêm mới'}
+              </motion.button>
+            ) : (
+              <motion.button
+                onClick={() => {
+                  setShowAddForm(!showAddForm)
+                  setFormData(data.siteSettings || {})
+                  setUploadResult(null)
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-6 py-3 rounded-full font-nunito font-bold flex items-center gap-2 shadow-lg border-2 ${
+                  showAddForm 
+                    ? 'bg-gradient-to-r from-pink-300 to-lavender-300 text-dark border-transparent' 
+                    : 'bg-gradient-to-r from-lavender-300 to-pink-300 text-dark border-transparent'
+                } transition-all duration-300 hover:shadow-xl hover:shadow-lavender-300/30`}
+              >
+                <Edit size={20} />
+                {showAddForm ? 'Đóng' : 'Chỉnh sửa'}
+              </motion.button>
+            )}
+          </div>
+
+          {/* Add/Edit Form hoặc Content Display */}
+          {showAddForm ? renderForm() : renderContentDisplay()}
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+          {[
+            { label: 'Thành viên', value: data.members?.length || 0, icon: '👥', color: 'text-lavender-300' },
+            { label: 'Gallery', value: data.gallery?.length || 0, icon: '📸', color: 'text-pink-300' },
+            { label: 'Videos', value: data.videos?.length || 0, icon: '🎬', color: 'text-mint-300' },
+            { label: 'Khoảnh khắc', value: data.momentsWall?.length || 0, icon: '💫', color: 'text-yellow-300' },
+          ].map(stat => (
+            <motion.div
+              key={stat.label}
+              whileHover={{ scale: 1.05 }}
+              className="rounded-xl p-4 text-center border border-lavender-300/20"
+              style={{
+                background: 'rgba(26, 11, 58, 0.6)'
+              }}
+            >
+              <div className="text-3xl mb-2">{stat.icon}</div>
+              <div className={`text-2xl font-fredoka font-bold ${stat.color}`}>
+                {stat.value}
+              </div>
+              <div className="font-nunito text-sm text-lavender-200 mt-1">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default AdminPanel
+EOF
+# Tạo firebase config
+cat > src/firebase/config.js << 'EOF'
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+export default firebaseConfig;
+EOF
+# Tạo firebase service
+cat > src/firebase/firebaseService.js << 'EOF'
+import { initializeApp } from 'firebase/app'
+import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, onSnapshot } from 'firebase/firestore'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import firebaseConfig from './config'
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig)
+const db = getFirestore(app)
+const storage = getStorage(app)
+
+// Collections
+const COLLECTIONS = {
+  SITE_SETTINGS: 'siteSettings',
+  MEMBERS: 'members',
+  ACHIEVEMENTS: 'achievements',
+  GALLERY: 'gallery',
+  VIDEOS: 'videos',
+  BEST_MOMENTS: 'bestMoments',
+  GUESTBOOK: 'guestbook',
+  MOMENTS_WALL: 'momentsWall'
+}
+
+// Site Settings
+export const getSiteSettings = async () => {
+  const docRef = doc(db, COLLECTIONS.SITE_SETTINGS, 'settings')
+  const docSnap = await getDoc(docRef)
+  return docSnap.exists() ? docSnap.data() : null
+}
+
+export const updateSiteSettings = async (data) => {
+  const docRef = doc(db, COLLECTIONS.SITE_SETTINGS, 'settings')
+  await setDoc(docRef, data, { merge: true })
+}
+
+// Generic CRUD operations
+export const getCollection = async (collectionName) => {
+  const querySnapshot = await getDoc(doc(db, collectionName, 'data'))
+  const data = querySnapshot.exists() ? querySnapshot.data() : { items: [] }
+  return data.items || []
+}
+
+export const addToCollection = async (collectionName, item) => {
+  const docRef = doc(db, collectionName, 'data')
+  const currentData = await getDoc(docRef)
+  const items = currentData.exists() ? currentData.data().items || [] : []
+  
+  const newItem = {
+    ...item,
+    id: Date.now().toString(),
+    createdAt: new Date().toISOString()
+  }
+  
+  await setDoc(docRef, { items: [...items, newItem] }, { merge: true })
+  return newItem
+}
+
+export const updateInCollection = async (collectionName, id, updates) => {
+  const docRef = doc(db, collectionName, 'data')
+  const currentData = await getDoc(docRef)
+  const items = currentData.exists() ? currentData.data().items || [] : []
+  
+  const updatedItems = items.map(item => 
+    item.id === id ? { ...item, ...updates, updatedAt: new Date().toISOString() } : item
+  )
+  
+  await setDoc(docRef, { items: updatedItems }, { merge: true })
+}
+
+export const deleteFromCollection = async (collectionName, id) => {
+  const docRef = doc(db, collectionName, 'data')
+  const currentData = await getDoc(docRef)
+  const items = currentData.exists() ? currentData.data().items || [] : []
+  
+  const filteredItems = items.filter(item => item.id !== id)
+  await setDoc(docRef, { items: filteredItems }, { merge: true })
+}
+
+// Realtime listener
+export const onCollectionUpdate = (collectionName, callback) => {
+  const docRef = doc(db, collectionName, 'data')
+  return onSnapshot(docRef, (docSnap) => {
+    if (docSnap.exists()) {
+      const data = docSnap.data()
+      callback(data.items || [])
+    } else {
+      callback([])
+    }
+  })
+}
+
+// Image Upload
+export const uploadImage = async (file, folder = 'uploads') => {
+  try {
+    // Create storage reference
+    const storageRef = ref(storage, `${folder}/${Date.now()}_${file.name}`)
+    
+    // Upload file
+    const snapshot = await uploadBytes(storageRef, file)
+    
+    // Get download URL
+    const downloadURL = await getDownloadURL(snapshot.ref)
+    
+    return {
+      url: downloadURL,
+      fileName: file.name,
+      size: file.size,
+      contentType: file.type
+    }
+  } catch (error) {
+    console.error('Upload error:', error)
+    throw error
+  }
+}
+
+// Listen to site settings changes
+export const onSiteSettingsUpdate = (callback) => {
+  const docRef = doc(db, COLLECTIONS.SITE_SETTINGS, 'settings')
+  return onSnapshot(docRef, (docSnap) => {
+    if (docSnap.exists()) {
+      callback(docSnap.data())
+    }
+  })
+}
+
+export { COLLECTIONS, db, storage }
+EOF
+cat > src/services/adminUpload.js << 'EOF'
+/**
+ * Admin Upload Service - Tích hợp trực tiếp vào form upload
+ * Sử dụng ImgBB (miễn phí) để upload public
+ */
+
+const IMGBB_API_KEY = 'YOUR_IMGBB_API_KEY' // Thay bằng key của bạn
+
+export const adminUploadImage = async (file, onProgress) => {
+  console.log('📤 Admin uploading:', file.name, `(${(file.size / 1024 / 1024).toFixed(2)}MB)`)
+  
+  // Tạo FormData
+  const formData = new FormData()
+  formData.append('image', file)
+  
+  try {
+    const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+      method: 'POST',
+      body: formData
+    })
+    
+    const data = await response.json()
+    
+    if (data.success) {
+      console.log('✅ Upload thành công:', data.data.url)
+      return {
+        success: true,
+        url: data.data.url,
+        display_url: data.data.display_url,
+        thumb: data.data.thumb.url,
+        size: data.data.size,
+        width: data.data.width,
+        height: data.data.height,
+        delete_url: data.data.delete_url
+      }
+    } else {
+      throw new Error(data.error.message || 'Upload failed')
+    }
+  } catch (error) {
+    console.error('❌ Upload failed:', error)
+    
+    // Fallback: Tạo blob URL tạm thời
+    const blobUrl = URL.createObjectURL(file)
+    return {
+      success: true,
+      url: blobUrl,
+      isTemporary: true,
+      message: 'Ảnh tạm thời (chỉ hiển thị trên trình duyệt này)'
+    }
+  }
+}
+
+// Lấy API key từ localStorage hoặc mặc định
+export const getImgBBKey = () => {
+  return localStorage.getItem('imgbb_api_key') || IMGBB_API_KEY
+}
+
+// Lưu API key
+export const setImgBBKey = (key) => {
+  localStorage.setItem('imgbb_api_key', key)
+}
+
+// Kiểm tra file ảnh
+export const validateImageFile = (file) => {
+  const maxSize = 200 * 1024 * 1024 // 200MB
+  const allowedTypes = [
+    'image/jpeg',
+    'image/jpg', 
+    'image/png',
+    'image/webp',
+    'image/gif',
+    'image/bmp',
+    'image/heic',
+    'image/heif'
+  ]
+  
+  if (!allowedTypes.includes(file.type.toLowerCase())) {
+    return { valid: false, error: 'Loại file không được hỗ trợ' }
+  }
+  
+  if (file.size > maxSize) {
+    const sizeMB = (file.size / 1024 / 1024).toFixed(2)
+    return { valid: false, error: `File quá lớn (${sizeMB}MB). Tối đa: 200MB` }
+  }
+  
+  return { valid: true }
+}
+EOF
+# Create .gitignore
+cat > .gitignore << 'EOF'
+# Dependencies
+node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+/build
+/dist
+
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor
+.vscode
+.idea
+EOF
+
+# Create README
+cat > README.md << 'EOF'
+# 💜✨ Purple Aurora Memories
+
+A luxurious, immersive website with dynamic visual effects including aurora shimmer backgrounds, floating stickers, scroll-triggered animations, and glass morphism design.
+
+## 🌟 Features
+
+- **Aurora Background**: Animated gradient blobs with shimmer effects
+- **Floating Stickers**: Hearts, stars, clouds, sparkles with subtle blur
+- **Scroll Animations**: Fade, slide, zoom, and parallax effects
+- **Glass Morphism**: Beautiful blur effects with transparency
+- **Hero Shrinking**: Logo and title shrink and move to header on scroll
+- **Responsive Design**: Desktop, tablet, and mobile optimized
+- **Real-time Updates**: All content updates immediately
+- **Admin Panel**: Full CRUD operations for all content
+
+## 🚀 Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## 🎨 Color Palette
+
+- **Lavender**: #C9A7F5
+- **Retro Purple**: #A67BCB
+- **Midnight**: #3C296D
+- **Mint**: #7FFFE7
+- **Pink**: #FFB8F5
+- **Neon Yellow**: #FFE47A
+
+## 📱 Pages
+
+- **Home**: Hero, Members, Story, Achievements
+- **Memories**: Gallery, Videos, Best Moments
+- **Guestbook**: Leave messages and like entries
+- **Moments Wall**: Post photos with stickers
+- **Admin**: Content management dashboard
+
+## 🔐 Admin Access
+
+Default password: `purple2024`
+
+## 🛠️ Technologies
+
+- React 18
+- Tailwind CSS
+- Framer Motion
+- React Router
+- Lucide Icons
+
+---
+
+Made with 💜 and ✨
+EOF
+
+echo "✅ All files created successfully!"
+echo ""
+echo "📦 Installing dependencies..."
+npm install
+
+echo ""
+echo "🎉 Setup complete!"
+echo ""
+echo "To start the development server, run:"
+echo "  cd purple-aurora-memories"
+echo "  npm run dev"
+echo ""
+echo "The app will open automatically in your browser at http://localhost:3000"
+echo ""
+echo "🔐 Admin panel password: purple2024"
+echo ""
+echo "Enjoy your Purple Aurora Memories website! 💜✨🌙"

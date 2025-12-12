@@ -1,0 +1,134 @@
+/* Fix Admin Panel Overlay Issues */
+
+/* Fix background khi mở modal chỉnh sửa */
+.admin-modal-fix {
+  background: linear-gradient(135deg, #0A041A 0%, #1A0B3A 50%, #0A041A 100%) !important;
+}
+
+/* Fix overlay không bị tím */
+.admin-overlay-fix {
+  background: rgba(10, 4, 26, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* Fix form background */
+.admin-form-fix {
+  background: rgba(26, 11, 58, 0.8) !important;
+  backdrop-filter: blur(15px) !important;
+  border: 1px solid rgba(201, 167, 245, 0.3) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Fix content display background */
+.admin-content-fix {
+  background: rgba(26, 11, 58, 0.6) !important;
+  border: 1px solid rgba(201, 167, 245, 0.2) !important;
+}
+
+/* Fix tab active state */
+.admin-tab-active-fix {
+  background: linear-gradient(135deg, rgba(201, 167, 245, 0.2), rgba(255, 184, 245, 0.1)) !important;
+  border-color: rgba(201, 167, 245, 0.5) !important;
+}
+
+/* Fix text color for better readability */
+.admin-text-fix {
+  color: #E2D9FF !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Fix input fields */
+.admin-input-fix {
+  background: rgba(10, 4, 26, 0.7) !important;
+  border: 1px solid rgba(201, 167, 245, 0.4) !important;
+  color: #F8F4FF !important;
+}
+
+.admin-input-fix::placeholder {
+  color: rgba(201, 167, 245, 0.5) !important;
+}
+
+/* Fix upload zone */
+.admin-upload-fix {
+  background: rgba(26, 11, 58, 0.4) !important;
+  border: 2px dashed rgba(201, 167, 245, 0.3) !important;
+}
+
+.admin-upload-fix:hover {
+  background: rgba(201, 167, 245, 0.1) !important;
+  border-color: rgba(201, 167, 245, 0.6) !important;
+}
+
+/* Fix button colors */
+.admin-button-fix {
+  background: linear-gradient(135deg, #C9A7F5, #A67BCB) !important;
+  color: #0A041A !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+
+.admin-button-fix:hover {
+  background: linear-gradient(135deg, #D9B7FF, #B68BDB) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(201, 167, 245, 0.4) !important;
+}
+
+/* Fix cancel button */
+.admin-cancel-fix {
+  background: rgba(201, 167, 245, 0.1) !important;
+  border: 1px solid rgba(201, 167, 245, 0.4) !important;
+  color: #C9A7F5 !important;
+}
+
+.admin-cancel-fix:hover {
+  background: rgba(201, 167, 245, 0.2) !important;
+}
+
+/* Fix preview images */
+.admin-preview-fix {
+  border: 2px solid rgba(201, 167, 245, 0.4) !important;
+  background: rgba(10, 4, 26, 0.8) !important;
+}
+
+/* Fix progress bar */
+.admin-progress-fix {
+  background: linear-gradient(90deg, #C9A7F5, #FFB8F5) !important;
+}
+
+/* Fix success/error messages */
+.admin-success-fix {
+  background: linear-gradient(135deg, rgba(127, 255, 231, 0.2), rgba(201, 167, 245, 0.1)) !important;
+  border: 1px solid rgba(127, 255, 231, 0.4) !important;
+  color: #7FFFE7 !important;
+}
+
+.admin-error-fix {
+  background: linear-gradient(135deg, rgba(255, 184, 245, 0.2), rgba(255, 152, 235, 0.1)) !important;
+  border: 1px solid rgba(255, 184, 245, 0.4) !important;
+  color: #FFB8F5 !important;
+}
+
+/* Fix scrollbar */
+.admin-scrollbar-fix::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-scrollbar-fix::-webkit-scrollbar-track {
+  background: rgba(26, 11, 58, 0.5);
+}
+
+.admin-scrollbar-fix::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #C9A7F5, #A67BCB);
+  border-radius: 4px;
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+  .admin-mobile-fix {
+    padding: 1rem !important;
+  }
+  
+  .admin-form-mobile-fix {
+    padding: 1.5rem !important;
+  }
+}
