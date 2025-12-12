@@ -1,211 +1,281 @@
 // components/FloatingMusicPlayer.jsx
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Play, Pause, Music, SkipBack, SkipForward } from 'lucide-react'
+import { Play, Pause, Music, SkipBack, SkipForward, AlertCircle } from 'lucide-react'
+
+// Lấy BASE_URL từ biến môi trường của Vite
+// BASE_URL sẽ là "/Perlindor/" khi deploy
+const BASE_URL = import.meta.env.BASE_URL;
 
 const FloatingMusicPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [currentSongIndex, setCurrentSongIndex] = useState(0)
-  const audioRef = useRef(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [currentSongIndex, setCurrentSongIndex] = useState(0)
+  const [playbackError, setPlaybackError] = useState(null) // State mới để báo lỗi
+  const audioRef = useRef(null)
 
-  // Danh sách bài hát từ thư mục public/music/
-  const songs = [
-    {
-      id: 1,
-      title: "Còn gì đẹp hơn",
-      src: "/music/cgdh.mp3"
-    },
-    {
-      id: 2,
-      title: "Vị nhà-Đen", 
-      src: "/music/vn.mp3"
-    },
-    {
-      id: 3,
-      title: "Đi về nhà-Đen",
-      src: "/music/dvn.mp3"
-    }
-  ]
+  // Danh sách bài hát từ thư mục public/music/
+  // BƯỚC FIX 1: THÊM BASE_URL VÀO ĐƯỜNG DẪN CỦA TỪNG BÀI HÁT
+  const songs = [
+    {
+      id: 1,
+      title: "Còn gì đẹp hơn",
+      src: `${BASE_URL}music/cgdh.mp3` // FIX: dùng BASE_URL
+    },
+    {
+      id: 2,
+      title: "Vị nhà-Đen", 
+      src: `${BASE_URL}music/vn.mp3` // FIX: dùng BASE_URL
+    },
+    {
+      id: 3,
+      title: "Đi về nhà-Đen",
+      src: `${BASE_URL}music/dvn.mp3` // FIX: dùng BASE_URL
+    }
+  ]
 
-  const currentSong = songs[currentSongIndex]
-
-  useEffect(() => {
+  const currentSong = songs[currentSongIndex]
+  
+  // Hàm Play
+  const playAudio = useCallback(async () => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.7
-      audioRef.current.onended = () => {
-        handleNextSong()
+      setPlaybackError(null) // Reset lỗi trước khi thử play
+      try {
+        await audioRef.current.play()
+        setIsPlaying(true)
+        setIsExpanded(true)
+      } catch (error) {
+        // BƯỚC FIX 2: BẮT LỖI AUTOPLAY
+        console.error("Autoplay/Playback Error:", error)
+        if (error.name === "NotAllowedError") {
+          setPlaybackError("Tự động phát nhạc bị chặn. Vui lòng bấm Play.")
+        } else {
+          setPlaybackError("Không thể phát nhạc. Vui lòng thử lại.")
+        }
+        setIsPlaying(false)
       }
     }
   }, [])
-
-  const togglePlay = () => {
+  
+  // Hàm Pause
+  const pauseAudio = useCallback(() => {
     if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause()
-        // Thu nhỏ ngay lập tức khi dừng
-        setIsExpanded(false)
-      } else {
-        audioRef.current.play()
-        // Mở rộng ngay lập tức khi phát
-        setIsExpanded(true)
-      }
-      setIsPlaying(!isPlaying)
+      audioRef.current.pause()
+      setIsPlaying(false)
+      setIsExpanded(false)
     }
-  }
+  }, [])
 
-  const handleNextSong = () => {
-    const nextIndex = (currentSongIndex + 1) % songs.length
-    setCurrentSongIndex(nextIndex)
-    setIsPlaying(true)
-    setIsExpanded(true)
-  }
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.7
+      audioRef.current.onended = () => {
+        handleNextSong()
+      }
+    }
+  }, [])
+  
+  const togglePlay = () => {
+    if (isPlaying) {
+      pauseAudio()
+    } else {
+      playAudio() // Gọi hàm play có xử lý lỗi Autoplay
+    }
+  }
 
-  const handlePrevSong = () => {
-    const prevIndex = (currentSongIndex - 1 + songs.length) % songs.length
-    setCurrentSongIndex(prevIndex)
-    setIsPlaying(true)
-    setIsExpanded(true)
-  }
+  const handleNextSong = () => {
+    const nextIndex = (currentSongIndex + 1) % songs.length
+    setCurrentSongIndex(nextIndex)
+    // Sau khi đổi bài, tự động gọi play
+    // (Lưu ý: Nếu trình duyệt chặn, nó sẽ tự động bị chặn và setPlaybackError)
+    if (isPlaying) {
+      // Đợi 1 chút để src thay đổi rồi gọi play
+      setTimeout(playAudio, 50); 
+    } else {
+      setIsExpanded(true); // Chỉ mở rộng mà không play nếu đang pause
+    }
+  }
 
-  return (
-    <>
-      <div className="fixed bottom-6 right-6 z-50">
-        {/* Player hình "viên thuốc" */}
-        <motion.div
-          className="relative flex items-center overflow-hidden"
-          animate={{
-            width: isExpanded ? 350 : 64,
-            height: 64,
-            borderRadius: 32,
-          }}
-          transition={{
-            type: "spring",
-            damping: 25,
-            stiffness: 200,
-          }}
-          style={{
-            background: isPlaying
-              ? 'linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%)'
-              : 'linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(168, 85, 247, 0.3)',
-            boxShadow: isPlaying
-              ? '0 8px 32px rgba(168, 85, 247, 0.25)'
-              : '0 4px 20px rgba(168, 85, 247, 0.15)'
-          }}
-        >
-          {/* Nút Play/Pause tròn */}
-          <motion.button
-            onClick={togglePlay}
-            className="relative w-14 h-14 rounded-full ml-1 flex-shrink-0"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {/* Vòng xoay gradient */}
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              animate={{
-                background: isPlaying
-                  ? 'linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #d946ef 100%)'
-                  : 'linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%)',
-                rotate: isPlaying ? 360 : 0
-              }}
-              transition={{
-                background: { duration: 0.3 },
-                rotate: {
-                  duration: 8,
-                  repeat: isPlaying ? Infinity : 0,
-                  ease: "linear"
-                }
-              }}
-            />
-            
-            {/* Hình tròn bên trong với icon */}
-            <div className="absolute inset-2 rounded-full bg-gray-900 flex items-center justify-center">
-              {isPlaying ? (
-                <Pause size={18} className="text-purple-300" />
-              ) : (
-                <Music size={18} className="text-purple-300" />
-              )}
-            </div>
-          </motion.button>
+  const handlePrevSong = () => {
+    const prevIndex = (currentSongIndex - 1 + songs.length) % songs.length
+    setCurrentSongIndex(prevIndex)
+    // Sau khi đổi bài, tự động gọi play
+    if (isPlaying) {
+      // Đợi 1 chút để src thay đổi rồi gọi play
+      setTimeout(playAudio, 50); 
+    } else {
+      setIsExpanded(true); // Chỉ mở rộng mà không play nếu đang pause
+    }
+  }
+  
+  // Quan sát việc thay đổi bài hát (currentSongIndex)
+  useEffect(() => {
+    if (audioRef.current) {
+      // Khi currentSongIndex thay đổi, set src và nếu đang play thì gọi playAudio
+      if (isPlaying) {
+        // Cần đảm bảo rằng audio element đã load metadata của bài mới trước khi play
+        // Tuy nhiên, việc thay đổi key trong JSX bên dưới sẽ tự động tải lại
+        // Chúng ta chỉ cần đảm bảo người dùng muốn play và gọi lại hàm play
+        playAudio(); 
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSongIndex, playAudio]);
 
-          {/* Nội dung mở rộng - chỉ hiện khi phát nhạc */}
-          {isExpanded && (
-            <motion.div
-              className="flex-1 flex items-center justify-between px-4"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
-            >
-              {/* Tên bài hát */}
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-white truncate text-sm">
-                  {currentSong.title}
-                </p>
-              </div>
 
-              {/* Nút điều khiển */}
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handlePrevSong}
-                  className="p-1.5 text-purple-300 hover:text-white transition-colors rounded-full hover:bg-purple-500/20"
-                  title="Bài trước"
-                >
-                  <SkipBack size={16} />
-                </button>
-                <button
-                  onClick={handleNextSong}
-                  className="p-1.5 text-purple-300 hover:text-white transition-colors rounded-full hover:bg-purple-500/20"
-                  title="Bài tiếp"
-                >
-                  <SkipForward size={16} />
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </motion.div>
+  return (
+    <>
+      <div className="fixed bottom-6 right-6 z-50">
+        {/* Player hình "viên thuốc" */}
+        <motion.div
+          className="relative flex items-center overflow-hidden"
+          animate={{
+            width: isExpanded ? 350 : 64,
+            height: 64,
+            borderRadius: 32,
+          }}
+          transition={{
+            type: "spring",
+            damping: 25,
+            stiffness: 200,
+          }}
+          style={{
+            background: isPlaying
+              ? 'linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%)'
+              : 'linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(168, 85, 247, 0.3)',
+            boxShadow: isPlaying
+              ? '0 8px 32px rgba(168, 85, 247, 0.25)'
+              : '0 4px 20px rgba(168, 85, 247, 0.15)'
+          }}
+        >
+          {/* Nút Play/Pause tròn */}
+          <motion.button
+            onClick={togglePlay}
+            className="relative w-14 h-14 rounded-full ml-1 flex-shrink-0"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {/* Vòng xoay gradient */}
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              animate={{
+                background: isPlaying
+                  ? 'linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #d946ef 100%)'
+                  : 'linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%)',
+                rotate: isPlaying ? 360 : 0
+              }}
+              transition={{
+                background: { duration: 0.3 },
+                rotate: {
+                  duration: 8,
+                  repeat: isPlaying ? Infinity : 0,
+                  ease: "linear"
+                }
+              }}
+            />
+            
+            {/* Hình tròn bên trong với icon */}
+            <div className="absolute inset-2 rounded-full bg-gray-900 flex items-center justify-center">
+              {isPlaying ? (
+                <Pause size={18} className="text-purple-300" />
+              ) : (
+                <Music size={18} className="text-purple-300" />
+              )}
+            </div>
+          </motion.button>
 
-        {/* Glow effect khi đang phát */}
-        {isPlaying && (
+          {/* Nội dung mở rộng */}
+          {isExpanded && (
+            <motion.div
+              className="flex-1 flex items-center justify-between px-4"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+            >
+              {/* Tên bài hát */}
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-white truncate text-sm">
+                  {currentSong.title}
+                </p>
+              </div>
+
+              {/* Nút điều khiển */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handlePrevSong}
+                  className="p-1.5 text-purple-300 hover:text-white transition-colors rounded-full hover:bg-purple-500/20"
+                  title="Bài trước"
+                >
+                  <SkipBack size={16} />
+                </button>
+                <button
+                  onClick={handleNextSong}
+                  className="p-1.5 text-purple-300 hover:text-white transition-colors rounded-full hover:bg-purple-500/20"
+                  title="Bài tiếp"
+                >
+                  <SkipForward size={16} />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </motion.div>
+
+        {/* THÔNG BÁO LỖI AUTOPLAY (Hiển thị khi bị chặn) */}
+        {playbackError && (
           <motion.div
-            className="absolute -inset-2 rounded-full pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: [0.3, 0.6, 0.3],
-              scale: [1, 1.05, 1]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            style={{
-              background: "radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, rgba(168, 85, 247, 0) 70%)"
-            }}
-          />
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-2 p-2 rounded-lg bg-red-800/80 backdrop-blur-md flex items-center gap-2 text-sm text-red-100 max-w-sm ml-auto"
+          >
+            <AlertCircle size={16} />
+            {playbackError}
+          </motion.div>
         )}
-      </div>
 
-      {/* Audio element */}
-      <audio
-        ref={audioRef}
-        src={currentSong.src}
-        preload="metadata"
-        key={currentSong.id}
-        onPlay={() => {
-          setIsPlaying(true)
-          setIsExpanded(true)
+        {/* Glow effect khi đang phát */}
+        {isPlaying && (
+          <motion.div
+            className="absolute -inset-2 rounded-full pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0.3, 0.6, 0.3],
+              scale: [1, 1.05, 1]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            style={{
+              background: "radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, rgba(168, 85, 247, 0) 70%)"
+            }}
+          />
+        )}
+      </div>
+
+      {/* Audio element */}
+      <audio
+        ref={audioRef}
+        src={currentSong.src}
+        preload="metadata"
+        key={currentSong.id}
+        // Loại bỏ onPlay/onPause, thay vào đó dùng useEffect và playAudio/pauseAudio
+        // Bắt sự kiện lỗi
+        onError={(e) => {
+          console.error("Audio Load Error:", e.target.error);
+          setPlaybackError("Lỗi tải file nhạc. Vui lòng kiểm tra đường dẫn.");
+          setIsPlaying(false);
+        }}
+        onLoadedMetadata={() => {
+          // Bỏ qua lỗi 404/đường dẫn sai nếu sự kiện này được kích hoạt
+          setPlaybackError(null); 
         }}
-        onPause={() => {
-          setIsPlaying(false)
-          setIsExpanded(false)
-        }}
-      />
-    </>
-  )
+      />
+    </>
+  )
 }
 
 export default FloatingMusicPlayer
