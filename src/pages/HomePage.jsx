@@ -315,7 +315,7 @@ const HomePage = () => {
                   Our Story
                 </h2>
                 <p className="font-nunito text-lg text-mint leading-relaxed mb-4">
-                  Born from a shared dream and unstoppable passion, Purple Aurora Memories is more than a team—it's a family bound by creativity, determination, and the magic of friendship.
+                  Born from a shared dream and unstoppable passion, Perlindor is more than a team—it's a family bound by creativity, determination, and the magic of friendship.
                 </p>
                 <p className="font-nunito text-lg text-pink leading-relaxed mb-4">
                   From late-night brainstorming sessions to celebrating our biggest victories, every moment has been a chapter in our incredible journey together.
