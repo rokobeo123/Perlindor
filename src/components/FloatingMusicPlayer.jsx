@@ -20,12 +20,12 @@ const FloatingMusicPlayer = () => {
     },
     {
       id: 2,
-      title: "Vị nhà-Đen", 
+      title: "Vị nhà", 
       src: `${BASE_URL}music/vn.mp3`
     },
     {
       id: 3,
-      title: "Đi về nhà-Đen",
+      title: "Đi về nhà",
       src: `${BASE_URL}music/dvn.mp3`
     },
     {
@@ -35,7 +35,7 @@ const FloatingMusicPlayer = () => {
     },
     {
       id : 5,
-      title: "Nhạc Hoạt Cảnh",
+      title: "Đám Cưới Hoạt Cảnh",
       src: `${BASE_URL}music/nhc.mp3`
     }
   ]
