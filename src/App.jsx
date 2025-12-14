@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { DataProvider } from './contexts/DataContext'
 import Navigation from './components/Navigation'
 import AuroraBackground from './components/AuroraBackground'
