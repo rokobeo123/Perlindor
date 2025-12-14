@@ -47,7 +47,9 @@ export default {
         'shimmer': 'shimmer 3s linear infinite',
         'glow': 'glow 2s ease-in-out infinite alternate',
         'flicker': 'flicker 3s ease-in-out infinite',
+        'pulse': 'pulse 2s ease-in-out infinite',
         'pulse-glow': 'pulse 2s ease-in-out infinite',
+        'slow-spin': 'slow-spin 20s linear infinite',
       },
       keyframes: {
         aurora: {
@@ -71,9 +73,46 @@ export default {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.7' },
         },
+        pulse: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
+        },
+        'slow-spin': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
       },
       backdropBlur: {
         xs: '2px',
+        sm: '4px',
+        DEFAULT: '8px',
+        md: '12px',
+        lg: '16px',
+        xl: '24px',
+        '2xl': '40px',
+        '3xl': '64px',
+      },
+      // Thêm transform để hỗ trợ GPU acceleration
+      transform: {
+        'gpu': 'translate3d(0, 0, 0)',
+      },
+      // Thêm will-change utilities
+      willChange: {
+        'transform': 'transform',
+        'opacity': 'opacity',
+        'auto': 'auto',
+      },
+      // Thêm transition timing functions
+      transitionTimingFunction: {
+        'spring': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+        'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+      // Thêm box shadow cho glow effects
+      boxShadow: {
+        'glow-sm': '0 0 10px var(--tw-shadow-color)',
+        'glow-md': '0 0 20px var(--tw-shadow-color)',
+        'glow-lg': '0 0 30px var(--tw-shadow-color)',
+        'glow-xl': '0 0 40px var(--tw-shadow-color)',
       },
     },
   },

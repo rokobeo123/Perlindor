@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useMemo } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useData } from '../contexts/DataContext'
 import { Award, Users, Book } from 'lucide-react'
@@ -14,15 +14,21 @@ const HomePage = () => {
   const heroY = useTransform(scrollY, [0, 300], [0, -100])
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0])
 
+  // Memoize filtered members to prevent re-renders
+  const filteredMembers = useMemo(() => 
+    data.members.filter(m => m.role === activeTab),
+    [data.members, activeTab]
+  )
+
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Shrinks and moves to header on scroll */}
+      {/* Hero Section - GIỮ NGUYÊN VẺ ĐẸP BAN ĐẦU */}
       <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
         <motion.div
           style={{ scale: heroScale, y: heroY, opacity: heroOpacity }}
           className="text-center z-10 px-4"
         >
-          {/* Logo with glow effect - Now editable image */}
+          {/* Logo with glow effect */}
           <motion.div
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
@@ -38,12 +44,12 @@ const HomePage = () => {
                   filter: 'drop-shadow(0 0 30px rgba(201, 167, 245, 0.8))'
                 }}
               />
-              {/* Aurora glow ring around logo - KHÔNG CÓ BLUR */}
+              {/* Aurora glow ring around logo */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-lavender via-pink to-mint opacity-30" />
             </div>
           </motion.div>
 
-          {/* Title with aurora shimmer - KHÔNG BỊ BLUR */}
+          {/* Title with aurora shimmer */}
           <motion.h1
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -66,7 +72,7 @@ const HomePage = () => {
             {data.siteSettings?.tagline || 'Where Dreams Shine Bright ✨'}
           </motion.p>
 
-          {/* CTA Button - NHỎ VÀ TINH TẾ */}
+          {/* CTA Button */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -114,7 +120,7 @@ const HomePage = () => {
         </motion.div>
       </section>
 
-      {/* Members Section */}
+      {/* Members Section - GIỮ NGUYÊN, CHỈ TỐI ƯU HIỆU SUẤT */}
       <section id="members" className="py-20 px-4 relative">
         <div className="max-w-6xl mx-auto">
           {/* Section Title */}
@@ -136,7 +142,7 @@ const HomePage = () => {
             <p className="font-nunito text-xl text-mint">The stars behind the magic</p>
           </motion.div>
 
-          {/* Tabs for Lead/Members - SỬA LẠI CHO DỄ NHÌN */}
+          {/* Tabs for Lead/Members */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -181,7 +187,7 @@ const HomePage = () => {
             </button>
           </motion.div>
 
-          {/* Members Grid with animated fade on tab switch */}
+          {/* Members Grid - TỐI ƯU: thêm will-change và transform-gpu */}
           <motion.div
             key={activeTab}
             initial={{ opacity: 0, x: activeTab === 'lead' ? -50 : 50 }}
@@ -190,88 +196,98 @@ const HomePage = () => {
             transition={{ duration: 0.5 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
           >
-            {data.members
-              .filter(m => m.role === activeTab)
-              .map((member, index) => (
-                <motion.div
-                  key={member.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ scale: 1.05, rotate: 2 }}
-                  className="glass rounded-3xl p-6 text-center relative overflow-hidden group blur-shadow"
-                >
-                  {/* Glow effect on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-lavender/10 to-pink/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  {/* Avatar - HIỂN THỊ ẢNH THAY VÌ EMOJI */}
-                  <div className="relative z-10">
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.3 }}
-                      className="relative mb-4 mx-auto w-24 h-24"
-                    >
-                      {member.avatarUrl ? (
-                        <>
-                          <img
-                            src={member.avatarUrl}
-                            alt={member.name}
-                            className="w-full h-full object-cover rounded-full border-4 border-lavender/30 shadow-lg"
-                          />
-                          {/* Role badge */}
-                          <div className={`absolute -bottom-2 -right-2 w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-lg ${
-                            member.role === 'lead' 
-                              ? 'bg-gradient-to-r from-yellow-400 to-amber-500 border-2 border-amber-300' 
-                              : 'bg-gradient-to-r from-pink-400 to-purple-500 border-2 border-pink-300'
-                          }`}>
-                            {member.role === 'lead' ? '👑' : '⭐'}
-                          </div>
-                          {/* Glow ring */}
-                          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-lavender/30 to-pink/30 blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </>
-                      ) : (
-                        <motion.div
-                          animate={{ rotate: [0, 5, -5, 0] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                          className="text-7xl mb-4"
-                        >
-                          {member.avatar}
-                        </motion.div>
-                      )}
-                    </motion.div>
-                    
-                    {/* Name */}
-                    <h3 className="font-fredoka text-2xl font-bold text-lavender mb-2">
-                      {member.name}
-                    </h3>
-                    
-                    {/* Nickname */}
-                    <p className="font-pacifico text-lg text-pink mb-4">
-                      "{member.nickname}"
-                    </p>
-                    
-                    {/* Fun Fact */}
-                    <p className="font-nunito text-sm text-mint">
-                      {member.funFact}
-                    </p>
-                  </div>
-
-                  {/* Floating sparkles */}
+            {filteredMembers.map((member, index) => (
+              <motion.div
+                key={member.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ 
+                  delay: Math.min(index * 0.08, 0.4), // Giảm delay tối đa
+                  duration: 0.5,
+                  type: "spring",
+                  stiffness: 100
+                }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  rotate: 2,
+                  transition: { duration: 0.2 } // Giảm duration hover
+                }}
+                className="glass rounded-3xl p-6 text-center relative overflow-hidden group blur-shadow transform-gpu"
+                style={{ willChange: 'transform' }}
+              >
+                {/* Glow effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-lavender/10 to-pink/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                {/* Avatar */}
+                <div className="relative z-10">
                   <motion.div
-                    animate={{ y: [-10, 10, -10], x: [-5, 5, -5] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="absolute top-2 right-2 text-2xl"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.2 }}
+                    className="relative mb-4 mx-auto w-24 h-24"
                   >
-                    ✨
+                    {member.avatarUrl ? (
+                      <>
+                        <img
+                          src={member.avatarUrl}
+                          alt={member.name}
+                          className="w-full h-full object-cover rounded-full border-4 border-lavender/30 shadow-lg transform-gpu"
+                          loading="lazy"
+                          style={{ willChange: 'transform' }}
+                        />
+                        {/* Role badge */}
+                        <div className={`absolute -bottom-2 -right-2 w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-lg ${
+                          member.role === 'lead' 
+                            ? 'bg-gradient-to-r from-yellow-400 to-amber-500 border-2 border-amber-300' 
+                            : 'bg-gradient-to-r from-pink-400 to-purple-500 border-2 border-pink-300'
+                        }`}>
+                          {member.role === 'lead' ? '👑' : '⭐'}
+                        </div>
+                        {/* Glow ring */}
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-lavender/30 to-pink/30 blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </>
+                    ) : (
+                      <motion.div
+                        animate={{ rotate: [0, 5, -5, 0] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="text-7xl mb-4"
+                      >
+                        {member.avatar}
+                      </motion.div>
+                    )}
                   </motion.div>
+                  
+                  {/* Name */}
+                  <h3 className="font-fredoka text-2xl font-bold text-lavender mb-2">
+                    {member.name}
+                  </h3>
+                  
+                  {/* Nickname */}
+                  <p className="font-pacifico text-lg text-pink mb-4">
+                    "{member.nickname}"
+                  </p>
+                  
+                  {/* Fun Fact */}
+                  <p className="font-nunito text-sm text-mint">
+                    {member.funFact}
+                  </p>
+                </div>
+
+                {/* Floating sparkles - Giảm số lượng animation */}
+                <motion.div
+                  animate={{ y: [-5, 5, -5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="absolute top-2 right-2 text-xl"
+                >
+                  ✨
                 </motion.div>
-              ))}
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Story Section */}
+      {/* Story Section - GIỮ NGUYÊN */}
       <section id="story" className="py-20 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -294,6 +310,7 @@ const HomePage = () => {
                   src="https://i.postimg.cc/HkZHwyCg/perlindor-chiennhudo-3762845028374006081-s2025-12-12-22-38-184-story.jpg"
                   alt="Our Story"
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-lavender/30 to-pink/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </motion.div>
@@ -329,7 +346,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Achievements Section */}
+      {/* Achievements Section - GIỮ NGUYÊN, CHỈ TỐI ƯU ANIMATION */}
       <section id="achievements" className="py-20 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -357,26 +374,43 @@ const HomePage = () => {
                 initial={{ opacity: 0, scale: 0.8, y: 50 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                className="relative group"
+                transition={{ 
+                  delay: Math.min(index * 0.07, 0.35), // Giảm delay tối đa
+                  duration: 0.5,
+                  type: "spring", // Dùng spring thay vì tween
+                  stiffness: 100
+                }}
+                whileHover={{ 
+                  scale: 1.1, 
+                  rotate: 5,
+                  transition: { duration: 0.2 } // Giảm duration hover
+                }}
+                className="relative group transform-gpu"
+                style={{ willChange: 'transform' }}
               >
-                {/* CHỈ VIỀN VÀNG BAO QUANH - không có background vàng */}
-                <div className="absolute -inset-0.5 border-4 border-neonYellow rounded-3xl opacity-70 group-hover:opacity-100 group-hover:border-8 transition-all duration-300"
+                {/* CHỈ VIỀN VÀNG BAO QUANH */}
+                <div className="absolute -inset-0.5 border-4 border-neonYellow rounded-3xl opacity-70 group-hover:opacity-100 group-hover:border-8 transition-all duration-200 ease-out"
                   style={{
                     filter: 'drop-shadow(0 0 10px rgba(255, 228, 122, 0.8))'
                   }}
                 />
                 
-                <div className="relative glass rounded-3xl p-6 text-center overflow-hidden blur-shadow bg-dark/90 backdrop-blur-xl">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative glass rounded-3xl p-6 text-center overflow-hidden blur-shadow bg-dark/90 backdrop-blur-xl transform-gpu">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                   
                   <motion.div
                     animate={{ 
                       scale: [1, 1.1, 1],
                     }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className={`text-7xl mb-4 text-${achievement.color}`}
+                    transition={{ 
+                      duration: 2, 
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className={`text-7xl mb-4 ${achievement.color === 'neonYellow' ? 'text-neonYellow' : 
+                      achievement.color === 'pink' ? 'text-pink' : 
+                      achievement.color === 'mint' ? 'text-mint' : 
+                      'text-lavender'}`}
                   >
                     {achievement.icon}
                   </motion.div>
@@ -385,7 +419,12 @@ const HomePage = () => {
                     {achievement.title}
                   </h3>
 
-                  <p className={`font-nunito text-sm font-bold text-${achievement.color} ${achievement.color === 'neonYellow' ? 'animate-pulse' : ''}`}>
+                  <p className={`font-nunito text-sm font-bold ${
+                    achievement.color === 'neonYellow' ? 'text-neonYellow animate-pulse' : 
+                    achievement.color === 'pink' ? 'text-pink' : 
+                    achievement.color === 'mint' ? 'text-mint' : 
+                    'text-lavender'
+                  }`}>
                     {achievement.category}
                   </p>
 
@@ -397,24 +436,28 @@ const HomePage = () => {
                     ⭐
                   </motion.div>
                   
-                  {[...Array(4)].map((_, i) => (
+                  {/* Giảm số lượng sparkles từ 4 xuống 2 */}
+                  {[0, 1].map((i) => (
                     <motion.div
                       key={i}
                       animate={{ 
                         y: [-5, 5, -5],
-                        x: [-3, 3, -3],
+                        x: i === 0 ? [-3, 3, -3] : [3, -3, 3],
                         rotate: [0, 180, 360]
                       }}
                       transition={{ 
-                        duration: 3 + i,
+                        duration: 4 + i,
                         repeat: Infinity,
-                        delay: i * 0.5
+                        delay: i * 0.5,
+                        ease: "easeInOut"
                       }}
-                      className={`absolute text-xl text-${achievement.color} ${
-                        i === 0 ? 'top-1 left-4' :
-                        i === 1 ? 'top-1 right-4' :
-                        i === 2 ? 'bottom-1 left-4' :
-                        'bottom-1 right-4'
+                      className={`absolute text-xl ${
+                        achievement.color === 'neonYellow' ? 'text-neonYellow' : 
+                        achievement.color === 'pink' ? 'text-pink' : 
+                        achievement.color === 'mint' ? 'text-mint' : 
+                        'text-lavender'
+                      } ${
+                        i === 0 ? 'top-1 left-4' : 'bottom-1 right-4'
                       }`}
                     >
                       ✨

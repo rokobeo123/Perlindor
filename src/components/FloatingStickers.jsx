@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 
-// Floating stickers with random positions and animations - FIXED WINDOW ISSUE
 const FloatingStickers = () => {
   const [stickers, setStickers] = useState([])
+  const [animate, setAnimate] = useState(false) // Thêm state này
 
   useEffect(() => {
     // Initialize stickers only on client side
     const initialStickers = [
-      { emoji: '💜', size: 'text-4xl', delay: 0, duration: 8 },
-      { emoji: '⭐', size: 'text-3xl', delay: 1, duration: 10 },
-      { emoji: '✨', size: 'text-2xl', delay: 2, duration: 7 },
-      { emoji: '💫', size: 'text-3xl', delay: 0.5, duration: 9 },
-      { emoji: '🌙', size: 'text-4xl', delay: 1.5, duration: 11 },
-      { emoji: '☁️', size: 'text-5xl', delay: 2.5, duration: 12 },
-      { emoji: '🦋', size: 'text-3xl', delay: 3, duration: 8 },
-      { emoji: '🌸', size: 'text-2xl', delay: 1, duration: 9 },
-      { emoji: '🎀', size: 'text-3xl', delay: 2, duration: 10 },
-      { emoji: '💖', size: 'text-4xl', delay: 0, duration: 8 }
+      { emoji: '💜', size: 'text-4xl' },
+      { emoji: '⭐', size: 'text-3xl' },
+      { emoji: '✨', size: 'text-2xl' },
+      { emoji: '💫', size: 'text-3xl' },
+      { emoji: '🌙', size: 'text-4xl' },
+      { emoji: '☁️', size: 'text-5xl' },
+      { emoji: '🦋', size: 'text-3xl' },
+      { emoji: '🌸', size: 'text-2xl' },
+      { emoji: '🎀', size: 'text-3xl' },
+      { emoji: '💖', size: 'text-4xl' }
     ]
     
-    // Only set positions if window is available
     const stickersWithPositions = initialStickers.map(sticker => ({
       ...sticker,
       initialX: typeof window !== 'undefined' ? Math.random() * window.innerWidth : 0,
@@ -30,6 +28,28 @@ const FloatingStickers = () => {
     setStickers(stickersWithPositions)
   }, [])
 
+  // Nếu không animate, hiển thị static stickers
+  if (!animate) {
+    return (
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        {stickers.slice(0, 5).map((sticker, index) => ( // Chỉ hiển thị 5 stickers
+          <div
+            key={index}
+            className={`absolute ${sticker.size} opacity-10`}
+            style={{
+              left: `${sticker.initialX}px`,
+              top: `${sticker.initialY}px`,
+              transform: 'translate(-50%, -50%)'
+            }}
+          >
+            {sticker.emoji}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  // Nếu có animate, hiển thị bình thường
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       {stickers.map((sticker, index) => (
@@ -45,13 +65,13 @@ const FloatingStickers = () => {
           animate={{
             y: [
               sticker.initialY,
-              typeof window !== 'undefined' ? Math.random() * window.innerHeight : sticker.initialY,
-              typeof window !== 'undefined' ? Math.random() * window.innerHeight : sticker.initialY
+              Math.random() * window.innerHeight,
+              Math.random() * window.innerHeight
             ],
             x: [
               sticker.initialX,
-              typeof window !== 'undefined' ? Math.random() * window.innerWidth : sticker.initialX,
-              typeof window !== 'undefined' ? Math.random() * window.innerWidth : sticker.initialX
+              Math.random() * window.innerWidth,
+              Math.random() * window.innerWidth
             ],
             rotate: [0, 180, 360],
             opacity: [0.1, 0.3, 0.1]
